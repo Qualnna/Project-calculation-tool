@@ -18,9 +18,10 @@ set foreign_key_checks = 1;
 
 create table project (
     project_id int auto_increment primary key,
-    project_name varchar(225) not null,
+    project_name varchar(255) not null,
     start_date date,
-    deadline date
+    deadline date,
+    constraint valid_date check (start_date < deadline)
 );
 
 create table sub_project (
@@ -42,8 +43,8 @@ create table task (
 create table external_resource (
     resource_id int auto_increment primary key ,
     task_id int not null,
-    payment_type varchar(64) not null,
-    price float not null,
+    payment_type varchar(63) not null,
+    price float unsigned not null,
     resource_name varchar(255) not null,
     description varchar(1000),
     source varchar(1000),
@@ -58,13 +59,13 @@ create table skill (
 create table employee (
     employee_id int auto_increment primary key ,
     employee_name varchar(255) not null,
-    hourly_rate float not null
+    hourly_rate float unsigned not null
 );
 
 create table employee_task (
     employee_id int not null,
     task_id int not null,
-    time_spent int not null,
+    time_spent int unsigned not null,
     primary key (employee_id, task_id),
     foreign key (employee_id) references employee (employee_id) on delete cascade,
     foreign key (task_id) references  task (task_id) on delete cascade

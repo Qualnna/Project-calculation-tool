@@ -44,7 +44,7 @@ create table external_resource (
     resource_id int auto_increment primary key ,
     task_id int not null,
     payment_type varchar(63) not null,
-    price float unsigned not null,
+    price float not null,
     resource_name varchar(255) not null,
     description varchar(1000),
     source varchar(1000),
@@ -59,17 +59,19 @@ create table skill (
 create table employee (
     employee_id int auto_increment primary key ,
     employee_name varchar(255) not null,
-    hourly_rate float unsigned not null
+    hourly_rate float not null
 );
 
 create table employee_task (
     employee_id int not null,
     task_id int not null,
+    sub_deadline date references sub_project (sub_deadline),
     time_spent int unsigned not null,
     completion_date date not null,
     primary key (employee_id, task_id),
     foreign key (employee_id) references employee (employee_id) on delete cascade,
-    foreign key (task_id) references  task (task_id) on delete cascade
+    foreign key (task_id) references  task (task_id) on delete cascade,
+    constraint deadline_met check (completion_date < sub_deadline)
 );
 
 create table task_skill (

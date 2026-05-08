@@ -66,6 +66,7 @@ create table employee_task (
     employee_id int not null,
     task_id int not null,
     time_spent int unsigned not null,
+    completion_date date not null,
     primary key (employee_id, task_id),
     foreign key (employee_id) references employee (employee_id) on delete cascade,
     foreign key (task_id) references  task (task_id) on delete cascade

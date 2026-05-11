@@ -1,3 +1,16 @@
+use project_calculation;
+
+Set foreign_key_checks = 0;
+truncate table project;
+truncate table sub_project;
+truncate table task;
+truncate table external_resource;
+truncate table skill;
+truncate table employee;
+set foreign_key_checks = 1;
+
+start transaction;
+
 
 #First project 'My First Project'
 insert into project(project_name, start_date, deadline) values ('My first project', '2026-6-10', '2026-10-1');
@@ -49,3 +62,4 @@ from (select task_id from task where task_id = 1) as t
 cross join (select skill_id from skill where skill_id = 1 ) as s;
 
 
+commit;

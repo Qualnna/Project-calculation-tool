@@ -24,6 +24,8 @@ create table project (
     constraint valid_date check (start_date < deadline)
 );
 
+
+
 create table sub_project (
     sub_id int auto_increment primary key ,
     project_id int not null,
@@ -40,6 +42,8 @@ create table task (
     foreign key (sub_id) references sub_project (sub_id) on delete cascade
 );
 
+
+
 create table external_resource (
     resource_id int auto_increment primary key ,
     task_id int not null,
@@ -50,6 +54,10 @@ create table external_resource (
     source varchar(1000),
     foreign key (task_id) references task (task_id) on delete cascade
 );
+
+
+
+
 
 create table skill (
     skill_id int auto_increment primary key ,

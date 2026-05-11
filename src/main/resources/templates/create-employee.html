@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<main>
+    <form action="#" th:action="@{/employee/add}" th:object="${newEmployee}" method="post">
+        <label>
+            Navn:
+            <input type="text" th:field="*{name}">
+        </label>
+        <br>
+        <label>
+            Timeløn:
+            <input type="number" th:field="*{hourlyRate}">
+        </label>
+        <br>
+        <label>
+            Kompetencer:
+            <select></select>
+        </label>
+        <br>
+        <button type="submit">Opret medarbejder</button>
+        <a th:href="@{/}"><button type="button">Annuller</button></a>
+    </form>
+</main>
+</body>
+</html>

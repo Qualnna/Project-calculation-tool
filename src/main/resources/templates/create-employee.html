@@ -20,7 +20,10 @@
         <br>
         <label>
             Kompetencer:
-            <select></select>
+            <select th:field="*{skills}" size="1" multiple>
+                <option selected>Vælg kompetencer</option>
+                <option th:each="skill: ${skills}" th:value="${skill}" th:text="${skill}"></option>
+            </select>
         </label>
         <br>
         <button type="submit">Opret medarbejder</button>

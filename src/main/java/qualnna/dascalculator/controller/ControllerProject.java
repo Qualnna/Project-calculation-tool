@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.service.ServiceProject;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/")
 public class ControllerProject {
@@ -19,6 +21,7 @@ public class ControllerProject {
     public String createEmployee(Model model) {
         Employee newEmployee = new Employee();
         model.addAttribute("newEmployee", newEmployee);
+        model.addAttribute("skills", service.getSkills());
         return "create-employee";
     }
     @PostMapping("/employee/add")

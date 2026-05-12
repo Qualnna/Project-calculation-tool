@@ -4,11 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.Project;
 
 import javax.sql.DataSource;
 import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @Repository
 public class RepositoryProject {
@@ -36,5 +42,9 @@ public class RepositoryProject {
         project.setId(keys.getInt("project_id"));
 
         return project;
+    }
+    public void deleteEmployee(int employeeId) throws SQLException {
+        String sql = "delete from employee where employee_id = ?";
+        jdbcTemplate.update(sql, employeeId);
     }
 }

@@ -26,7 +26,7 @@ public class ControllerProject {
     }
     @PostMapping("/employee/add")
     public String addEmployee(@ModelAttribute Employee newEmployee) {
-
+        service.addEmployee(newEmployee);
         return "redirect:/";
     }
 

@@ -2,6 +2,7 @@ package qualnna.dascalculator.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.util.List;
@@ -16,5 +17,9 @@ public class ServiceProject {
 
     public List<String> getSkills() {
         return repository.getSkills();
+    }
+
+    public void addEmployee(Employee employee) {
+        repository.addEmployee(employee);
     }
 }

@@ -2,6 +2,7 @@ package qualnna.dascalculator.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.rowMappers.SingleColumnRowMapper;
 
 import java.util.ArrayList;
@@ -24,5 +25,14 @@ public class RepositoryProject {
             results.add(skill);
         }
         return results;
+    }
+
+    public void addEmployee(Employee employee) {
+        String sqlEmployee = """
+                insert into employee (employee_name, hourly_rate)
+                values (?, ?);
+                """;
+        jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
+
     }
 }

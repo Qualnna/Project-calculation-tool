@@ -1,4 +1,5 @@
 package qualnna.dascalculator.model;
 
-public class Task {
+public record Task(int taskId, int subId, String taskName, double workload) {
+
 }

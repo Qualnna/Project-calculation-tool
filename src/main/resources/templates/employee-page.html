@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee page</title>
+</head>
+<body>
+<h1>Employee  page </h1>
+<ul th:each="employee: ${employees}">
+    <li th:text="${employee.getName()}"></li>
+    <li th:text="${employee.getHourlyRate()}"></li>
+    <li th:text="${employee.getAssignedTasks()}"></li>
+    <li th:text="${employee.getSkills()}"></li>
+</ul>
+</body>
+</html>

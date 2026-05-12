@@ -23,9 +23,7 @@ public class RepositoryProject {
     private final Connection connection;
 
     public void deleteEmployee(int employeeId) throws SQLException {
-        String sql = "select employee_id from employee where employee_id = ?";
-        Connection statement;
-        statement.
-        jdbcTemplate.execute(sql);
+        String sql = "delete from employee where employee_id = ?";
+        jdbcTemplate.update(sql, employeeId);
     }
 }

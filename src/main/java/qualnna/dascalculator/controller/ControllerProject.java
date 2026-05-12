@@ -1,10 +1,7 @@
 package qualnna.dascalculator.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import qualnna.dascalculator.service.ServiceProject;
 
 import java.sql.SQLException;
@@ -20,7 +17,7 @@ public class ControllerProject {
     }
 
     @PostMapping("/delete/{employeeId}")
-    public String deleteEmployee(@RequestParam int employeeId) throws SQLException {
+    public String deleteEmployee(@PathVariable int employeeId) throws SQLException {
         service.deleteEmployee(employeeId);
         return "redirect:/";
     }

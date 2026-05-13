@@ -1,21 +1,28 @@
 package qualnna.dascalculator.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import qualnna.dascalculator.model.Employee;
+import org.springframework.web.bind.annotation.*;
 import qualnna.dascalculator.service.ServiceProject;
 
-import java.util.List;
+import java.sql.SQLException;
+import org.springframework.ui.Model;
+import qualnna.dascalculator.model.Employee;
 
 @Controller
 @RequestMapping("/")
 public class ControllerProject {
-    private final ServiceProject service;
-    public ControllerProject(ServiceProject service) {this.service = service;}
+
+    final ServiceProject service;
+
+    public ControllerProject(ServiceProject service) {
+        this.service = service;
+    }
+
+    @PostMapping("/delete/{employeeId}")
+    public String deleteEmployee(@PathVariable int employeeId) throws SQLException {
+        service.deleteEmployee(employeeId);
+        return "redirect:/";
+    }
 
     @GetMapping("/employee/create")
     public String createEmployee(Model model) {

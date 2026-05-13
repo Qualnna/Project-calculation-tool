@@ -7,6 +7,11 @@
 <body>
 
 <main>
+    <div class="error-box" th:if="${errorMessage}">
+        <p>Placeholder error message: </p>
+        <p>Medarbejderen kunne ikke oprettes. Du bedes sikre dig at alle felter er udfyldt korrekt.</p>
+    </div>
+
     <form action="#" th:action="@{/employee/add}" th:object="${newEmployee}" method="post">
         <label>
             Navn:

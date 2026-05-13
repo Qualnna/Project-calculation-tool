@@ -59,12 +59,29 @@ public class RepositoryProject {
         return results;
     }
 
-    public void addEmployee(Employee employee) {
+    public void addEmployee(Employee employee) throws SQLException{
         String sqlEmployee = """
                 insert into employee (employee_name, hourly_rate)
                 values (?, ?);
                 """;
         jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
 
+        addEmpSkill(employee);
+    }
+
+    public void addEmpSkill(Employee employee) throws SQLException {
+        List<String> skills = employee.getSkills();
+        String sqlEmpSkill = """
+                insert into employee_skill (employee_id, skill_id) select e.employee_id, s.skill_id
+                from (select employee_id from employee where employee_name = ?) as e
+                cross join (select skill_id from skill where skill_name = ?) as s;
+                """;
+        PreparedStatement prepStmt = connection.prepareStatement(sqlEmpSkill);
+        for(String skill: skills) {
+            prepStmt.setString(1, employee.getName());
+            prepStmt.setString(2, skill);
+            prepStmt.addBatch();
+        }
+        prepStmt.executeBatch();
     }
 }

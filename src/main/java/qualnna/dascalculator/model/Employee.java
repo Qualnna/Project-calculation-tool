@@ -51,4 +51,10 @@ public class Employee {
     public void setAssignedTask(List<Task> assignedTask) {
         this.assignedTask = assignedTask;
     }
+
+    public void addSkills(List<String> newSkills) {
+        for (String skill: newSkills) {
+            skills.add(skill);
+        }
+    }
 }

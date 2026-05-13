@@ -31,7 +31,11 @@ public class ServiceProject {
         return repository.getSkills();
     }
 
-    public void addEmployee(Employee employee) {
-        repository.addEmployee(employee);
+    public void addEmployee(Employee employee) throws SQLException {
+        try {
+            repository.addEmployee(employee);
+        } catch (SQLException e) {
+            System.out.println("Error in creating employee: " + e.getMessage());
+        }
     }
 }

@@ -2,8 +2,6 @@ package qualnna.dascalculator.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.Project;
 
@@ -14,6 +12,7 @@ import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.rowMappers.SingleColumnRowMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -51,12 +50,20 @@ public class RepositoryProject {
     public List<String> getSkills() {
         String sqlSkills = "select skill_name from skill";
         List<String> skills = jdbcTemplate.query(sqlSkills, new SingleColumnRowMapper());
-        List<String> results = new ArrayList<>();
 
+        List<String> results = new ArrayList<>();
         for(String skill: skills) {
             results.add(skill);
         }
         return results;
+    }
+
+    public void insertSkill (String skill) {
+        String sqlInsert = """
+                insert into skill (skill_name)
+                values (?)
+                """;
+        jdbcTemplate.update(sqlInsert, skill);
     }
 
     public void addEmployee(Employee employee) throws SQLException{

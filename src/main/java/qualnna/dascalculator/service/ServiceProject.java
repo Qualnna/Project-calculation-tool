@@ -6,6 +6,7 @@ import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,5 +29,21 @@ public class ServiceProject {
 
     public List<Employee> fetchEmployees() throws SQLException {
         return repository.fetchEmployees();
+    }
+
+    public Employee fetchEmployee(int employeeId) {
+        return repository.fetchEmployee(employeeId);
+    }
+
+    public void updateEmployee(Employee employee) {
+        repository.updateEmployee(employee);
+    }
+
+    public List<String> getSkills() {
+
+        if (repository.getSkills() != null) {
+            return new ArrayList<>();
+        }
+        return repository.getSkills();
     }
 }

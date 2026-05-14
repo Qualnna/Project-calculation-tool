@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee page</title>
+    <link th:rel="stylesheet" th:href="@{/css/edit-employee.css}"></link>
+</head>
+<body>
+<h1>Employee table </h1>
+
+<form action="#" th:action="@{/employee/update}" th:object="${employee}" method="post">
+<div class="container">
+        <h1>Register</h1>
+        <p>Please fill in this form to create an account.</p>
+        <hr>
+        <input type="hidden" th:field="*{employeeId}">
+
+    <label for="name"><b>Employee Name</b></label>
+        <input type="text"  th:value="${employee.getName()}" name="name" id="name" required>
+
+        <label for="hourly_rate"><b>Hourly rate</b></label>
+        <input type="number" th:value="${employee.getHourlyRate()}" name="hourly_rate" id="hourly_rate" required>
+        <br>
+        <br>
+    <div th:each="skill : ${skills}">
+        <input type="checkbox"
+               th:value="${skill}"
+               name="skills"
+               th:checked="${#lists.contains(employee.getSkills(), skill)}"/>
+        <label th:text="${skill}"></label>
+    </div>
+    </div>
+    <hr>
+
+    <button type="submit" class="submit-btn">Edit employee</button>
+    <button type ="reset" class="cancel-btn">
+        <a th:href="@{/employees}">Cancel</a>
+    </button>
+</form>
+
+</body>
+</html>

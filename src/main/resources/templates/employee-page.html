@@ -3,14 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Employee page</title>
+    <link th:rel="stylesheet" th:href="@{/css/employee-style.css}"></link>
 </head>
 <body>
-<h1>Employee  page </h1>
-<ul th:each="employee: ${employees}">
-    <li th:text="${employee.getName()}"></li>
-    <li th:text="${employee.getHourlyRate()}"></li>
-    <li th:text="${employee.getAssignedTasks()}"></li>
-    <li th:text="${employee.getSkills()}"></li>
-</ul>
+<h1>Employee table </h1>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Hourly/Rate</th>
+        <th>Skills</th>
+        <th>Task(s)</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="employee: ${employees}">
+        <td th:text="${employee.getName()}"></td>
+        <td th:text="${employee.getHourlyRate()}"></td>
+        <td th:text="${employee.getSkills().isEmpty() ? 'No skills' : employee.getSkillsAsString()}"></td>
+        <td>
+            <span th:if="${employee.getAssignedTasks().isEmpty()}">No tasks</span>
+            <span th:each="task, iter : ${employee.getAssignedTasks()}"
+                  th:text="${task.taskName() + (iter.last ? '' : ', ')}"></span>
+        </td>
+     <td>
+            <a th:href="@{/employee/{employeeId}/edit(employeeId=${employee.getEmployeeId()})}">Edit</a>
+        </td>
+    </tr>
+
+</table>
+
+
 </body>
 </html>

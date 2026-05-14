@@ -50,6 +50,11 @@ public class Employee {
         this.assignedTasks = assignedTasks;
     }
 
+    public String getSkillsAsString() {
+        if (skills == null) return "";
+        return String.join(", ", skills);
+    }
+
 
 
 

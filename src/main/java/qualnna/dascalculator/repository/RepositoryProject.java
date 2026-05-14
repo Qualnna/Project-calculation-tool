@@ -2,12 +2,6 @@ package qualnna.dascalculator.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
@@ -18,10 +12,7 @@ import java.sql.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class RepositoryProject {
@@ -70,61 +61,62 @@ public class RepositoryProject {
                         s.skill_id,
                         s.skill_name
                         from employee e
-                        INNER JOIN employee_task et ON e.employee_id = et.employee_id
-                        INNER JOIN task t ON et.task_id = t.task_id
-                        INNER JOIN employee_skill esk ON e.employee_id = esk.employee_id
-                        INNER JOIN skill s ON esk.skill_id = s.skill_id;
+                        LEFT JOIN employee_task et ON e.employee_id = et.employee_id
+                        LEFT JOIN task t ON et.task_id = t.task_id
+                        LEFT JOIN employee_skill esk ON e.employee_id = esk.employee_id
+                        LEFT JOIN skill s ON esk.skill_id = s.skill_id
                 
                         """;
 
-        return jdbcTemplate.query(sql, resultSet -> {
-            Map<Integer, Employee> employeeMap = new HashMap<>();
-            while (resultSet.next()) {
-                int employeeId = resultSet.getInt("employee_id");
+        return jdbcTemplate.query(sql, new EmployeeListMapper());
+    }
 
-                Employee employee = employeeMap.get(employeeId);
-                if(employee == null) {
-                    employee = new Employee();
-                    employee.setEmployeeId(employeeId);
-                    employee.setName(resultSet.getString("employee_name"));
-                    employee.setHourlyRate(resultSet.getFloat("hourly_rate"));
-                    employee.setAssignedTasks(new ArrayList<Task>());
-                    employee.setSkills(new ArrayList<String>());
-                    employeeMap.put(employeeId, employee);
-                }
+    public Employee fetchEmployee(int employeeId) {
+        String sql = """
+                        select e.employee_id,
+                        e.employee_name,
+                        e.hourly_rate,
+                        t.task_id,
+                        t.sub_id,
+                        t.workload,
+                        t.task_name,
+                        s.skill_id,
+                        s.skill_name
+                        from employee e
+                        LEFT JOIN employee_task et ON e.employee_id = et.employee_id
+                        LEFT JOIN task t ON et.task_id = t.task_id
+                        LEFT JOIN employee_skill esk ON e.employee_id = esk.employee_id
+                        LEFT JOIN skill s ON esk.skill_id = s.skill_id
+                        WHERE e.employee_id = ?
 
-                int taskId = resultSet.getInt("task_id");
-                if (taskId > 0) {
-                    boolean taskAlreadyAssigned = false;
-                    for (Task existingTask : employee.getAssignedTasks()) {
-                        if (existingTask.taskId() == taskId) {
-                            taskAlreadyAssigned = true;
-                            break;
-                        }
-                    }
-                    if (!taskAlreadyAssigned) {
-                        Task newTask = new Task(taskId, resultSet.getInt("sub_id"),
-                                resultSet.getString("task_name"), resultSet.getDouble("workload"));
-                        employee.getAssignedTasks().add(newTask);
-                    }
+                
+                """;
 
-                }
-                String skillName = resultSet.getString("skill_name");
-                if (skillName != null) {
-                    boolean skillAlreadyAdded = false;
-                    for (String existingSkill : employee.getSkills()) {
-                        if (existingSkill.equals(skillName)) {
-                            skillAlreadyAdded = true;
-                            break;
-                        }
-                    }
-                    if (!skillAlreadyAdded) {
-                        employee.getSkills().add(skillName);
-                    }
-                }
+          Employee employee = jdbcTemplate.query(sql, ps -> ps.setInt(1, employeeId), new EmployeeMapper());
+          return employee;
+    }
+
+
+    public List<String> getSkills() {
+        String sql = "select skill_name from skill";
+        return jdbcTemplate.queryForList(sql, String.class);
+    }
+
+    public void updateEmployee(Employee employee) {
+        jdbcTemplate.update(
+                "UPDATE employee SET employee_name = ?, hourly_rate = ? WHERE employee_id = ?",
+                employee.getName(), employee.getHourlyRate(), employee.getEmployeeId()
+        );
+
+
+            jdbcTemplate.update("DELETE FROM employee_skill WHERE employee_id = ?", employee.getEmployeeId());
+            for (String skill : employee.getSkills()) {
+                jdbcTemplate.update("INSERT IGNORE INTO skill (skill_name) VALUES (?)", skill);
+                jdbcTemplate.update("""
+                    INSERT IGNORE INTO employee_skill(employee_id, skill_id)
+                    SELECT ?, skill_id FROM skill WHERE skill_name = ?
+                    """, employee.getEmployeeId(), skill);
             }
-            return new ArrayList<>(employeeMap.values());
-        });
 
     }
 }

@@ -11,6 +11,7 @@ import qualnna.dascalculator.model.Project;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,8 +36,8 @@ class RepositoryProjectTest {
     void addProject() throws Exception {
         Project projectToInsert = new Project();
         projectToInsert.setName("test Project");
-        projectToInsert.setStartdate(Date.valueOf("2026-11-24"));
-        projectToInsert.setDeadline(Date.valueOf("2026-12-24"));
+        projectToInsert.setStartdate(LocalDate.parse("2026-11-24"));
+        projectToInsert.setDeadline(LocalDate.parse("2026-12-24"));
 
         Project projectWithID = repository.addProject(projectToInsert);
     }
@@ -45,8 +46,8 @@ class RepositoryProjectTest {
     void addProjectInvalidDates() throws Exception{
         Project projectToInsert = new Project();
         projectToInsert.setName("test project");
-        projectToInsert.setStartdate(Date.valueOf("2026-12-24"));
-        projectToInsert.setDeadline(Date.valueOf("2026-11-24"));
+        projectToInsert.setStartdate(LocalDate.parse("2026-12-24"));
+        projectToInsert.setDeadline(LocalDate.parse("2026-11-24"));
 
         assertThrows(SQLException.class, () -> {repository.addProject(projectToInsert);});
     }

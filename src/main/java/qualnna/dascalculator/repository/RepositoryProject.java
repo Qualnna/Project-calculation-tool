@@ -27,8 +27,8 @@ public class RepositoryProject {
 
         PreparedStatement statement = connection.prepareStatement(SQLAddProject, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, project.getName());
-        statement.setDate(2, (Date) project.getStartdate());
-        statement.setDate(3, (Date) project.getDeadline());
+        statement.setObject(2, project.getStartdate());
+        statement.setObject(3, project.getDeadline());
 
         statement.executeUpdate();
         ResultSet keys = statement.getGeneratedKeys();

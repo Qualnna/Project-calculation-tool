@@ -1,17 +1,13 @@
-drop database if exists project_calculation;
-create database project_calculation
-	default character set utf8mb4;
-
+create database if not exists project_calculation;
 use project_calculation;
-
 set foreign_key_checks = 0;
 drop table if exists task_skill;
 drop table if exists employee_skill;
 drop table if exists employee_task;
+drop table if exists external_resource;
+drop table if exists task;
 drop table if exists skill;
 drop table if exists employee;
-drop table if exists task;
-drop table if exists external_resource;
 drop table if exists sub_project;
 drop table if exists project;
 set foreign_key_checks = 1;

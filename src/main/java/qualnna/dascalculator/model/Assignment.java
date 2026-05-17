@@ -11,6 +11,12 @@ public class Assignment {
     private Employee assignedEmployee;
 
     public Assignment (){}
+
+    public Assignment(LocalDate completionDate, int timeSpent) {
+        this.completionDate = completionDate;
+        this.timeSpent = timeSpent;
+    }
+
     public Assignment(LocalDate completionDate, int timeSpent, Employee assignedEmployee) {
         this.completionDate = completionDate;
         this.timeSpent = timeSpent;

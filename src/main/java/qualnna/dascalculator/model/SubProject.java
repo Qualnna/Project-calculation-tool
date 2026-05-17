@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class SubProject {
+    private int subProjectID;
     private String subProjectName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate subProjectDeadline;
@@ -13,7 +14,14 @@ public class SubProject {
 
     public SubProject(){}
 
-    public SubProject(String subProjectName, LocalDate subProjectDeadline, List<Task> tasks) {
+    public SubProject(int subProjectID, String subProjectName, LocalDate subProjectDeadline) {
+        this.subProjectID = subProjectID;
+        this.subProjectName = subProjectName;
+        this.subProjectDeadline = subProjectDeadline;
+    }
+
+    public SubProject(int subProjectID, String subProjectName, LocalDate subProjectDeadline, List<Task> tasks) {
+        this.subProjectID = subProjectID;
         this.subProjectName = subProjectName;
         this.subProjectDeadline = subProjectDeadline;
         this.tasks = tasks;
@@ -41,5 +49,13 @@ public class SubProject {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public int getSubProjectID() {
+        return subProjectID;
+    }
+
+    public void setSubProjectID(int subProjectID) {
+        this.subProjectID = subProjectID;
     }
 }

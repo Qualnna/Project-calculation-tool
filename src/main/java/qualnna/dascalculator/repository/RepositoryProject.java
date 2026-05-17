@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
+import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
 import qualnna.dascalculator.repository.dataExtractors.SurfaceProjectDataRowMapper;
 
 import javax.sql.DataSource;
@@ -33,17 +34,6 @@ public class RepositoryProject {
         return jdbcTemplate.query(SQLGetSkills, new SingleColumnRowMapper<>());
     }
 
-    public List<Project> readSurfaceInfo(){
-        String SQLGetProjectNames = """
-                select project_id as project_id,
-                project_name as name,
-                start_date as start_date,
-                deadline as deadline from project;
-                """;
-
-        return jdbcTemplate.query(SQLGetProjectNames, new SurfaceProjectDataRowMapper());
-    }
-
     public List<Employee> readEmployees(){
         String SQLGetEmployees = """
                 select employee_name as employee_name,
@@ -57,6 +47,32 @@ public class RepositoryProject {
 
         return jdbcTemplate.query(SQLGetEmployees, new EmployeeResultSetExtractor());
     }
+
+    public List<Project> readSurfaceInfo(){
+        String SQLGetProjectNames = """
+                select project_id as project_id,
+                project_name as name,
+                start_date as start_date,
+                deadline as deadline from project;
+                """;
+
+        return jdbcTemplate.query(SQLGetProjectNames, new SurfaceProjectDataRowMapper());
+    }
+
+    public Project readProjectInfo(int projectID){
+        String SQLGetProjectNames = """
+                select project_id as project_id,
+                project_name as name,
+                start_date as start_date,
+                deadline as deadline from project
+                where project_id = ?;
+                """;
+
+        jdbcTemplate.query(SQLGetProjectNames, new ProjectResultSetExctractor(jdbcTemplate, connection), projectID);
+
+        return null ;
+    }
+
 
     public Project addProject(Project project) throws SQLException {
         String SQLAddProject = """

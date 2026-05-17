@@ -3,10 +3,7 @@ package qualnna.dascalculator.controller;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
@@ -27,7 +24,27 @@ public class ControllerProject {
     ControllerProject(ServiceProject service){this.service = service;}
 
     private boolean validateSession(HttpSession session){
-        return session!=null;
+        return session.getAttribute("employees")==null||session.getAttribute("skills")==null;
+    }
+
+    @GetMapping("/")
+    public String startPage(Model model, HttpSession session){
+        if(validateSession(session)){
+            this.employees = service.readEmployees();
+            this.skills = service.readSkills();
+            session.setAttribute("employees", this.employees);
+            session.setAttribute("skills", this.skills);
+        }
+        model.addAttribute("projects", service.readSurfaceInfo());
+
+        return "home-page";
+    }
+
+    @PostMapping("/readProjectInfo/{projectID}")
+    public String readProjectInfo(@PathVariable int projectID, Model model, HttpSession session){
+        this.project = service.readProjectInfo(projectID);
+        session.setAttribute("project", this.project);
+        return "redirect:/show-project";
     }
 
     @GetMapping("/addProject")

@@ -3,6 +3,7 @@ package qualnna.dascalculator.model;
 import java.util.List;
 
 public class Task {
+    private int taskID;
     private String taskName;
     private int workload;
     private List<ExternalResource> externalResources;
@@ -10,6 +11,12 @@ public class Task {
     private List<Assignment> assignments;
 
     public Task (){}
+
+    public Task(int taskID, String taskName, int workload) {
+        this.taskID = taskID;
+        this.taskName = taskName;
+        this.workload = workload;
+    }
 
     public Task(String taskName, int workload, List<ExternalResource> externalResources, List<String> skills, List<Assignment> assignments) {
         this.taskName = taskName;
@@ -57,5 +64,13 @@ public class Task {
 
     public void setAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
+    }
+
+    public int getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(int taskID) {
+        this.taskID = taskID;
     }
 }

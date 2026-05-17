@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @Sql(scripts ="classpath:H2Schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//@Sql(value = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(value = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class RepositoryProjectTest {
 
     @Autowired

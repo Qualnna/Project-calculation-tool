@@ -103,6 +103,6 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
                 from sub_project where project_id = ?;
                 """;
 
-        return jdbcTemplate.query(SQLSubProjects, new SubProjectResultSetExtractor(jdbcTemplate, connection), projectID);
+        return jdbcTemplate.query(SQLSubProjects, new SubProjectResultSetExtractor(jdbcTemplate), projectID);
     }
 }

@@ -14,11 +14,9 @@ import java.util.List;
 
 public class SubProjectResultSetExtractor implements ResultSetExtractor<List<SubProject>> {
     private final JdbcTemplate jdbcTemplate;
-    private final Connection connection;
 
-    public SubProjectResultSetExtractor(JdbcTemplate jdbcTemplate, Connection connection) {
+    public SubProjectResultSetExtractor(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.connection = connection;
     }
 
     @Override

@@ -61,16 +61,14 @@ public class RepositoryProject {
 
     public Project readProjectInfo(int projectID){
         String SQLGetProjectNames = """
-                select project_id as project_id,
-                project_name as name,
-                start_date as start_date,
-                deadline as deadline from project
+                select project_id,
+                project_name,
+                start_date,
+                deadline from project
                 where project_id = ?;
                 """;
 
-        jdbcTemplate.query(SQLGetProjectNames, new ProjectResultSetExctractor(jdbcTemplate, connection), projectID);
-
-        return null ;
+        return jdbcTemplate.query(SQLGetProjectNames, new ProjectResultSetExctractor(jdbcTemplate, connection), projectID);
     }
 
 

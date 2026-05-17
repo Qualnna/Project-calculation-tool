@@ -1,11 +1,12 @@
 package qualnna.dascalculator.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Employee {
     private String employeeName;
     private float hourlyPayRate;
-    private List<String> skills;
+    private List<String> skills = new ArrayList<>();
 
     public Employee(){}
 

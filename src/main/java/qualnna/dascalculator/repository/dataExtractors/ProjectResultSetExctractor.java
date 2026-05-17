@@ -22,13 +22,13 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
     }
 
     @Override
-    public Project extractData(@NonNull ResultSet resultSet) throws SQLException {
+    public Project extractData(ResultSet resultSet) throws SQLException {
 
-
+        resultSet.first();
         Project foundProject = new Project(
                 resultSet.getInt("project_id"),
                 resultSet.getString("project_name"),
-                resultSet.getDate("startdate").toLocalDate(),
+                resultSet.getDate("start_date").toLocalDate(),
                 resultSet.getDate("deadline").toLocalDate());
 
         foundProject.setSubProjects(readSubProjects(foundProject.getId()));

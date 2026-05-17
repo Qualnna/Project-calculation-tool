@@ -59,7 +59,7 @@ public class TaskResultSetExtractor implements ResultSetExtractor<List<Task>> {
     }
     private List<Assignment> findAssignments(Task task){
         String SQLAssignments = """
-                select employee_id, time_spent, completion_date
+                select *
                 from employee_task where task_id = ?;
                 """;
 

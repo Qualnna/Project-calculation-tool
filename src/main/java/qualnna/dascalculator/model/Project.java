@@ -23,6 +23,13 @@ public class Project {
 
     public Project(){}
 
+    public Project(int id, String name, LocalDate startdate, LocalDate deadline) {
+        this.id = id;
+        this.name = name;
+        this.startdate = startdate;
+        this.deadline = deadline;
+    }
+
     public Project(int id, String name, LocalDate startdate, LocalDate deadline, int totalRequiredWorkload, int totalAssignedWorkload, float estimatedPrice, List<SubProject> subProjects) {
         this.id = id;
         this.name = name;

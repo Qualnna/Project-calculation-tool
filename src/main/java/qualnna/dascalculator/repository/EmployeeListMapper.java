@@ -31,7 +31,7 @@ public class EmployeeListMapper implements ResultSetExtractor<List<Employee>> {
             }
 
             int taskId = resultSet.getInt("task_id");
-            if (taskId > 0) {
+            if (taskId > 0)  { // MySQL returns 0 if its null
                 boolean taskAlreadyAssigned = false;
                 for (Task existingTask : employee.getAssignedTasks()) {
                     if (existingTask.taskId() == taskId) {
@@ -41,7 +41,7 @@ public class EmployeeListMapper implements ResultSetExtractor<List<Employee>> {
                 }
                 if (!taskAlreadyAssigned) {
                     Task newTask = new Task(taskId, resultSet.getInt("sub_id"),
-                            resultSet.getString("task_name"), resultSet.getDouble("workload"));
+                            resultSet.getString("task_name"), resultSet.getInt("workload"));
                     employee.getAssignedTasks().add(newTask);
                 }
 
@@ -61,5 +61,5 @@ public class EmployeeListMapper implements ResultSetExtractor<List<Employee>> {
             }
         }
         return new ArrayList<>(employeeMap.values());
-    };
+    }
  }

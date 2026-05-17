@@ -27,7 +27,7 @@ public class ServiceProject {
         }
     }
 
-    public List<Employee> fetchEmployees() throws SQLException {
+    public List<Employee> fetchEmployees(){
         return repository.fetchEmployees();
     }
 
@@ -41,9 +41,6 @@ public class ServiceProject {
 
     public List<String> getSkills() {
 
-        if (repository.getSkills() != null) {
-            return new ArrayList<>();
-        }
         return repository.getSkills();
     }
 }

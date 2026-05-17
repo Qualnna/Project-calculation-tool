@@ -20,16 +20,16 @@ insert into task(task_name, workload, sub_id) values ('Develop an account page',
 insert into task(task_name, workload, sub_id) values ('Develop a header', 2, 1);
 
 
---Available employees in the company
+-- Available employees in the company
 insert into employee (employee_name, hourly_rate) values ('John', 650);
 insert into employee (employee_name, hourly_rate) values ('Sarah', 1650);
 insert into employee (employee_name, hourly_rate) values ('Melissa', 1200);
 
 
 -- Available Skills
-insert into skill (skill_name) values ('AngularJS'); #1
-insert into skill (skill_name) values ('NodeJS'); #2
-insert into skill (skill_name) values ('MySQL'); #3
+insert into skill (skill_name) values ('AngularJS'); -- 1
+insert into skill (skill_name) values ('NodeJS'); -- 2
+insert into skill (skill_name) values ('MySQL'); -- 3
 
 -- Available external ressources:
 -- 1 - Front end Consultant

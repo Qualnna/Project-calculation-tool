@@ -14,7 +14,6 @@ public class EmployeeMapper implements ResultSetExtractor<Employee> {
     public Employee extractData(ResultSet resultSet) throws SQLException, DataAccessException {
       Employee employee = null;
         while (resultSet.next()) {
-            int employeeId = resultSet.getInt("employee_id");
             if(employee == null) {
                 employee = new Employee();
                 employee.setEmployeeId(resultSet.getInt("employee_id"));
@@ -34,7 +33,7 @@ public class EmployeeMapper implements ResultSetExtractor<Employee> {
                 }
                 if (!taskAlreadyAssigned) {
                     Task newTask = new Task(taskId, resultSet.getInt("sub_id"),
-                            resultSet.getString("task_name"), resultSet.getDouble("workload"));
+                            resultSet.getString("task_name"), resultSet.getInt("workload"));
                     employee.getAssignedTasks().add(newTask);
                 }
 

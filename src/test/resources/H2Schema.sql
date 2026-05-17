@@ -4,8 +4,8 @@ drop table if exists employee_skill;
 drop table if exists employee_task;
 drop table if exists skill;
 drop table if exists employee;
-drop table if exists task;
 drop table if exists external_resource;
+drop table if exists task;
 drop table if exists sub_project;
 drop table if exists project;
 

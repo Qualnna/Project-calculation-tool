@@ -7,20 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Sql(scripts ="classpath:H2Schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//@Sql(value = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(value = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class RepositoryProjectTest {
 
     @Autowired
     private RepositoryProject repository;
+
+
 
     @BeforeEach
     void setUp() {
@@ -36,7 +44,87 @@ class RepositoryProjectTest {
         projectToInsert.setName("test Project");
         projectToInsert.setStartdate(Date.valueOf("2026-11-24"));
         projectToInsert.setDeadline(Date.valueOf("2026-12-24"));
-
         Project projectWithID = repository.addProject(projectToInsert);
+    }
+
+    @Test
+    void fetchEmployees_returnsAllEmployeesWithTasksAndSkills() {
+        List<Employee> employees = repository.fetchEmployees();
+        assertEquals(2, employees.size());
+        Employee alice = new Employee();
+        for (Employee employee : employees) {
+            if (employee.getName().equals("Alice")){
+                alice = employee;
+            }
+        }
+
+        assertEquals("Alice", alice.getName());
+        List<String> skills = alice.getSkills();
+        assertTrue(skills.containsAll(List.of("Java", "SQL")));
+        assertEquals(2, alice.getAssignedTasks().size());
+
+
+    }
+
+    @Test
+    void fetchEmployee_returnsRightEmployee() {
+        Employee alice = repository.fetchEmployee(1);
+
+        assertNotNull(alice);
+        assertEquals("Alice", alice.getName());
+        assertEquals(500, alice.getHourlyRate());
+        assertEquals(List.of("Java", "SQL"), alice.getSkills());
+    }
+
+    @Test
+    void getSkills() {
+        List<String> skills = repository.getSkills();
+        assertEquals(List.of("Java", "SQL", "Python"), skills);
+    }
+
+    @Test
+    void deleteEmployee_removesEmployee() throws SQLException {
+        repository.deleteEmployee(1);
+        List<Employee> remaining = repository.fetchEmployees();
+        assertEquals(1, remaining.size());
+        assertEquals(2, remaining.getFirst().getEmployeeId());
+    }
+
+    @Test
+    void updateEmployee_changesNameAndHourlyRate() {
+        Employee alice = repository.fetchEmployee(1);
+        alice.setName("Thomas");
+        alice.setHourlyRate(750);
+        repository.updateEmployee(alice);
+
+        Employee thomas = repository.fetchEmployee(1);
+        assertEquals("Thomas", thomas.getName());
+        assertEquals(750, thomas.getHourlyRate());
+    }
+
+    @Test
+    void updateEmployee_handlesEmptySkillList() {
+        Employee alice = repository.fetchEmployee(1);
+        alice.setSkills(new ArrayList<>());
+        repository.updateEmployee(alice);
+
+        Employee reloaded = repository.fetchEmployee(1);
+        assertEquals(List.of(), reloaded.getSkills());
+    }
+
+    @Test
+    void updateEmployee_replaceSkills() {
+        Employee alice = repository.fetchEmployee(1);
+        alice.setSkills(new ArrayList<>(List.of("Python", "Java")));
+
+        repository.updateEmployee(alice);
+
+        Employee newAlice = repository.fetchEmployee(1);
+        // Using set here to ensure that the order that the database returns does not matter
+        assertEquals(Set.of("Python", "Java"), new HashSet<>(newAlice.getSkills()));
+
+
+
+
     }
 }

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Edit Employee page</title>
-    <link th:rel="stylesheet" th:href="@{/css/edit-employee.css}"></link>
+    <link th:rel="stylesheet" th:href="@{/css/edit-employee.css}">
 </head>
 <body>
 <h1>Employee table </h1>
@@ -16,17 +16,20 @@
         <input type="hidden" th:field="*{employeeId}">
 
     <label for="name"><b>Employee Name</b></label>
-        <input type="text"  th:value="${employee.getName()}" name="name" id="name" required>
+        <input type="text"  th:field="${employee.name}" id="name" required>
 
         <label for="hourly_rate"><b>Hourly rate</b></label>
-        <input type="number" th:value="${employee.getHourlyRate()}" name="hourly_rate" id="hourly_rate" required>
+        <input th:field="*{hourlyRate}" type="number"  id="hourly_rate" required>
         <br>
         <br>
     <div th:each="skill : ${skills}">
-        <input type="checkbox"
-               th:value="${skill}"
-               name="skills"
-               th:checked="${#lists.contains(employee.getSkills(), skill)}"/>
+        <label>
+            <!--            I use the #lists expression on line 31 from thymeleaf here to use the contains method-->
+            <input type="checkbox"
+                   th:value="${skill}"
+                   name="skills" 
+                   th:checked="${employee.getSkills() != null && #lists.contains(employee.getSkills(), skill)}"/>
+        </label>
         <label th:text="${skill}"></label>
     </div>
     </div>

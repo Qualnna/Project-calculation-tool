@@ -1,5 +1,6 @@
 package qualnna.dascalculator.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Employee {
@@ -35,7 +36,8 @@ public class Employee {
     }
 
     public List<String> getSkills() {
-        return skills;
+
+        return skills == null ? new ArrayList<>() : skills;
     }
 
     public void setSkills(List<String> skills) {

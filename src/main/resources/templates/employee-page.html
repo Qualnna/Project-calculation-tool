@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Employee page</title>
@@ -18,9 +18,12 @@
     </tr>
     <tr th:each="employee: ${employees}">
         <td th:text="${employee.getName()}"></td>
-        <td th:text="${employee.getHourlyRate()}"></td>
+        <td th:text="${#numbers.formatInteger(employee.getHourlyRate(), 1)}"></td>
+        <!--         I want to use the toString from the employee model instead of its native object reference -->
         <td th:text="${employee.getSkills().isEmpty() ? 'No skills' : employee.getSkillsAsString()}"></td>
         <td>
+
+            <!--            Trying to split tasks with spacing on the employee page (line 28) -->
             <span th:if="${employee.getAssignedTasks().isEmpty()}">No tasks</span>
             <span th:each="task, iter : ${employee.getAssignedTasks()}"
                   th:text="${task.taskName() + (iter.last ? '' : ', ')}"></span>

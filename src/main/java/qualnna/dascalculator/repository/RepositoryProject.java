@@ -3,10 +3,9 @@ package qualnna.dascalculator.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
-import qualnna.dascalculator.model.Task;
-
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -14,6 +13,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+@Transactional
 @Repository
 public class RepositoryProject {
     public RepositoryProject(JdbcTemplate jdbcTemplate, @Autowired DataSource dataSource) throws SQLException {
@@ -46,10 +46,7 @@ public class RepositoryProject {
         jdbcTemplate.update(sql, employeeId);
     }
 
-    public List<Employee> fetchEmployees() throws SQLException {
-        List<String> skills;
-         List<Task> assignedTasks;
-
+    public List<Employee> fetchEmployees() {
         String sql = """
                         select e.employee_id,
                         e.employee_name,
@@ -91,9 +88,7 @@ public class RepositoryProject {
 
                 
                 """;
-
-          Employee employee = jdbcTemplate.query(sql, ps -> ps.setInt(1, employeeId), new EmployeeMapper());
-          return employee;
+          return jdbcTemplate.query(sql, ps -> ps.setInt(1, employeeId), new EmployeeMapper());
     }
 
 
@@ -107,13 +102,11 @@ public class RepositoryProject {
                 "UPDATE employee SET employee_name = ?, hourly_rate = ? WHERE employee_id = ?",
                 employee.getName(), employee.getHourlyRate(), employee.getEmployeeId()
         );
-
-
             jdbcTemplate.update("DELETE FROM employee_skill WHERE employee_id = ?", employee.getEmployeeId());
             for (String skill : employee.getSkills()) {
-                jdbcTemplate.update("INSERT IGNORE INTO skill (skill_name) VALUES (?)", skill);
-                jdbcTemplate.update("""
-                    INSERT IGNORE INTO employee_skill(employee_id, skill_id)
+                jdbcTemplate.update(
+                    """
+                    INSERT INTO employee_skill(employee_id, skill_id)
                     SELECT ?, skill_id FROM skill WHERE skill_name = ?
                     """, employee.getEmployeeId(), skill);
             }

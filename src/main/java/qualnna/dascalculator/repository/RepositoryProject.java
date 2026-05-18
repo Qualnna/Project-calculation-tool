@@ -71,8 +71,14 @@ public class RepositoryProject {
                 insert into employee (employee_name, hourly_rate)
                 values (?, ?);
                 """;
-        jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
-
+        //jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
+        try (PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee)) {
+            updateEmp.setString(1, employee.getName());
+            updateEmp.setFloat(2, employee.getHourlyRate());
+            updateEmp.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         addEmpSkill(employee);
     }
 

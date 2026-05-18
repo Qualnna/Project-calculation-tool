@@ -6,7 +6,7 @@ import java.util.List;
 public class Employee {
     private int empId;
     private String name;
-    private double hourlyRate;
+    private float hourlyRate;
     private List<String> skills = new ArrayList<>();
     private List<Task> assignedTask = new ArrayList<>();
 
@@ -28,11 +28,11 @@ public class Employee {
         this.name = name;
     }
 
-    public double getHourlyRate() {
+    public float getHourlyRate() {
         return hourlyRate;
     }
 
-    public void setHourlyRate(double hourlyRate) {
+    public void setHourlyRate(float hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
 

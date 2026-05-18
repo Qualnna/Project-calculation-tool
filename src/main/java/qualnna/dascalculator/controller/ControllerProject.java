@@ -34,9 +34,8 @@ public class ControllerProject {
         return "create-employee";
     }
     @PostMapping("/employee/add")
-    public String addEmployee(@ModelAttribute Employee newEmployee, @ModelAttribute List<String> skills, Model model) {
+    public String addEmployee(@ModelAttribute Employee newEmployee, Model model) {
         try {
-        newEmployee.addSkills(skills);
         service.addEmployee(newEmployee);
         return "redirect:/";
         } catch (SQLException e) {

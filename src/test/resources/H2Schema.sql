@@ -4,12 +4,12 @@ drop table if exists employee_skill;
 drop table if exists employee_task;
 drop table if exists skill;
 drop table if exists employee;
-drop table if exists task;
+--drop table if exists task;
 drop table if exists external_resource;
-drop table if exists sub_project;
-drop table if exists project;
+--drop table if exists sub_project;
+--drop table if exists project;
 
-create table project (
+create table if not exists project (
                          project_id int auto_increment primary key,
                          project_name varchar(255) not null,
                          start_date date,
@@ -17,7 +17,7 @@ create table project (
                          constraint valid_date check (start_date < deadline)
 );
 
-create table sub_project (
+create table if not exists sub_project (
                              sub_id int auto_increment primary key ,
                              project_id int not null,
                              sub_name varchar(255) not null,
@@ -25,7 +25,7 @@ create table sub_project (
                              foreign key (project_id) references project (project_id) on delete cascade
 );
 
-create table task (
+create table if not exists task (
                       task_id int auto_increment primary key ,
                       sub_id int not null,
                       task_name varchar(255) not null,

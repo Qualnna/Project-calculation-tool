@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ServiceProject {
-    public final RepositoryProject repository;
+    private final RepositoryProject repository;
 
     public ServiceProject(RepositoryProject repository) {
         this.repository = repository;

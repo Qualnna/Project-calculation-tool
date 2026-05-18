@@ -21,13 +21,14 @@ import java.util.List;
 
 @Repository
 public class RepositoryProject {
+    private final JdbcTemplate jdbcTemplate;
+    private final Connection connection;
+
     public RepositoryProject(JdbcTemplate jdbcTemplate, @Autowired DataSource dataSource) throws SQLException {
         this.jdbcTemplate = jdbcTemplate;
         this.connection = dataSource.getConnection();
     }
 
-    private final JdbcTemplate jdbcTemplate;
-    private final Connection connection;
 
     public Project addProject(Project project) throws SQLException {
         String SQLAddProject = """

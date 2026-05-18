@@ -14,7 +14,7 @@ import qualnna.dascalculator.model.Employee;
 @RequestMapping("/")
 public class ControllerProject {
 
-    final ServiceProject service;
+    private final ServiceProject service;
 
     public ControllerProject(ServiceProject service) {
         this.service = service;

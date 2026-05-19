@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Ad project page')}"></head>
+<body class="d-flex">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<main class="p-4 flex-grow-1">
 <span th:if="${errorMessage != null}" th:text="${errorMessage}" style="color:red"></span>
 <form action="#" th:action="@{/addProject}" th:object="${project}" method="post">
     <label for="name">Name of project</label>
@@ -15,5 +15,6 @@
     <input type="date" id="deadline" th:field="*{{deadline}}">
     <button type="submit">Create Project</button>
 </form>
+    </main>
 </body>
 </html>

@@ -44,8 +44,13 @@ public class ServiceProject {
         }
     }
 
-    public List<Employee> fetchEmployees(){
-        return repository.fetchEmployees();
+    public void deleteEmployee(int employeeId) throws SQLException {
+        try {
+            repository.deleteEmployee(employeeId);
+        }
+        catch (SQLException e) {
+            System.out.println("Error in deleting employee: " + e.getMessage());;
+        }
     }
 
     public Employee fetchEmployee(int employeeId) {

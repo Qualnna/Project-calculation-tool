@@ -9,7 +9,7 @@ set foreign_key_checks = 1;
 
 
 
-#First project 'My First Project'
+-- First project 'My First Project'
 insert into project(project_name, start_date, deadline) values ('My first project', '2026-6-10', '2026-10-1');
 insert into sub_project(sub_name, sub_deadline, project_id) values ('Frontend', '2026-8-1', 1);
 insert into sub_project(sub_name, sub_deadline, project_id) values ('Backend', '2026-8-1', 1);

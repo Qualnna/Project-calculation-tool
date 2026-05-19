@@ -92,10 +92,8 @@ public class ControllerProject {
     }
     @GetMapping("/employee/{employeeId}/edit")
     public String employeeView (@PathVariable int employeeId, Model model) {
-        Employee employee = service.fetchEmployee(employeeId);
-        List<String> skills = service.getSkills();
-        model.addAttribute("employee", employee);
-        model.addAttribute("skills", skills);
+        model.addAttribute("employee", service.fetchEmployee(employeeId));
+        model.addAttribute("skills", service.getSkills());
         return "edit-employee";
     }
 
@@ -105,12 +103,20 @@ public class ControllerProject {
         return "redirect:/employees";
     }
 
+    @PostMapping("/employee/delete/{employeeID}")
+    public String deleteEmployee (@PathVariable int employeeID) throws SQLException {
+        service.deleteEmployee(employeeID);
+        return "redirect:/employees";
+    }
+
 
     @GetMapping("/employees")
-    public String employeePage (Model model) throws SQLException {
-        model.addAttribute("employees", service.fetchEmployees());
+    public String employeePage (HttpSession session) {
+        session.setAttribute("employees", service.readEmployees());
         return "employee-page";
     }
+
+
 
 
 }

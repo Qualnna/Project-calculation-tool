@@ -44,15 +44,17 @@ class ControllerProjectTest {
     private ControllerProject controllerProject;
 
     private MockHttpSession session;
+    private Employee alice;
+    private List<Employee> employees = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        Employee alice = new Employee();
-        alice.setEmployeeId(1);
-        alice.setName("Alice");
-        alice.setHourlyRate(500f);
+        alice = new Employee();
+        alice.setEmployeeID(1);
+        alice.setEmployeeName("Alice");
+        alice.setHourlyPayRate(500f);
         alice.setSkills(new ArrayList<>(List.of("Java", "SQL")));
-        alice.setAssignedTasks(new ArrayList<>());
+        employees.add(alice);
         when(serviceProject.fetchEmployee(1)).thenReturn(alice);
         when(serviceProject.getSkills()).thenReturn(List.of("Java", "SQL", "Python"));
 
@@ -116,9 +118,9 @@ class ControllerProjectTest {
 
     @Test
     void deleteEmployee() throws Exception {
-        mockMvc.perform(post("/delete/1"))
+        mockMvc.perform(post("/employee/delete/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"));
+                .andExpect(redirectedUrl("/employees"));
 
 
         // Checks that the service is called to delete Alice
@@ -133,7 +135,6 @@ class ControllerProjectTest {
                 .andExpect(view().name("edit-employee"))
                 .andExpect(model().attributeExists("employee"))
                 .andExpect(model().attributeExists("skills"));
-
         Mockito.verify(serviceProject).fetchEmployee(1);
         Mockito.verify(serviceProject).getSkills();
     }
@@ -141,9 +142,9 @@ class ControllerProjectTest {
     @Test
     void updateEmployeeAction() throws Exception {
         mockMvc.perform(post("/employee/update")
-                        .param("employeeId", "1")
-                        .param("name", "Alice")
-                        .param("hourlyRate", "500.0")
+                        .param("employeeID", "1")
+                        .param("employeeName", "Alice")
+                        .param("hourlyPayRate", "500.0")
                         .param("skills", "Java", "SQL"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/employees"));
@@ -153,20 +154,21 @@ class ControllerProjectTest {
         verify(serviceProject).updateEmployee(captor.capture());
 
         Employee alice = captor.getValue();
-        assertEquals(1, alice.getEmployeeId());
-        assertEquals("Alice", alice.getName());
-        assertEquals(500f, alice.getHourlyRate());
+        assertEquals(1, alice.getEmployeeID());
+        assertEquals("Alice", alice.getEmployeeName());
+        assertEquals(500f, alice.getHourlyPayRate());
         // Comparing it as a set since order from the DB is not guaranteed.
         assertEquals(Set.of("Java", "SQL"), new HashSet<>(alice.getSkills()));
     }
 
     @Test
     void employeePage() throws Exception {
+        List<Employee> employees = new ArrayList<>();
         mockMvc.perform(get("/employees"))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(model().attributeExists("employees"))
+                .andExpect(request().sessionAttribute("employees", employees))
                 .andExpect(view().name("employee-page"));
 
-        Mockito.verify(serviceProject).fetchEmployees();
+        Mockito.verify(serviceProject).readEmployees();
     }
 }

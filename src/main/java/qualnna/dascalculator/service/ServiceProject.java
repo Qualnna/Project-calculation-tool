@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
+import qualnna.dascalculator.model.Task;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
@@ -22,10 +23,12 @@ public class ServiceProject {
     public List<String> readSkills(){return repository.readSkills();}
     public List<Employee> readEmployees(){return repository.readEmployees();}
     public List<Project> readSurfaceInfo(){return repository.readSurfaceInfo();}
-
     public Project readProjectInfo(int projectID){
         return repository.readProjectInfo(projectID);
     }
+public List<Task> readTasks(int projectID) {
+    return repository.readTasks(projectID);
+}
 
 
     public Project addProject(Project projectToAdd) throws SQLException {
@@ -66,3 +69,4 @@ public class ServiceProject {
         return repository.getSkills();
     }
 }
+

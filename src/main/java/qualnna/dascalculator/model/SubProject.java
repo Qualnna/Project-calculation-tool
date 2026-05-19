@@ -47,6 +47,17 @@ public class SubProject {
         return tasks;
     }
 
+    public String getTasksAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (Task task : tasks) {
+            sb.append(task.getTaskName());
+            sb.append(", ");
+        }
+        if (sb.length() > 0) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        return sb.toString();
+    }
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }

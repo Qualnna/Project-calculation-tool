@@ -73,4 +73,9 @@ public class Task {
     public void setTaskID(int taskID) {
         this.taskID = taskID;
     }
+
+    @Override
+    public String toString() {
+        return taskName;
+    }
 }

@@ -24,19 +24,21 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
     @Override
     public Project extractData(ResultSet resultSet) throws SQLException {
 
-        resultSet.first();
-        Project foundProject = new Project(
-                resultSet.getInt("project_id"),
-                resultSet.getString("project_name"),
-                resultSet.getDate("start_date").toLocalDate(),
-                resultSet.getDate("deadline").toLocalDate());
+        while (resultSet.next()) {
+            Project foundProject = new Project(
+                    resultSet.getInt("project_id"),
+                    resultSet.getString("project_name"),
+                    resultSet.getDate("start_date").toLocalDate(),
+                    resultSet.getDate("deadline").toLocalDate());
 
-        foundProject.setSubProjects(readSubProjects(foundProject.getId()));
+            foundProject.setSubProjects(readSubProjects(foundProject.getId()));
 
-        foundProject.setTotalRequiredWorkload(readRequiredWorkload(foundProject));
-        foundProject.setTotalAssignedWorkload(readAssignedWorkload(foundProject));
-        foundProject.setEstimatedPrice(readEstimatedPrice(foundProject));
-        return foundProject;
+            foundProject.setTotalRequiredWorkload(readRequiredWorkload(foundProject));
+            foundProject.setTotalAssignedWorkload(readAssignedWorkload(foundProject));
+            foundProject.setEstimatedPrice(readEstimatedPrice(foundProject));
+            return foundProject;
+        }
+        return null;
     }
 
     private int readRequiredWorkload(Project project) throws SQLException{

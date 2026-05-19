@@ -4,6 +4,25 @@
 <head th:replace="~{fragments/layout :: head('Show Project Page')}"></head>
 <body class="d-flex">
 <div th:replace="~{fragments/layout :: navbar}"></div>
-
+<main class="p-4 flex-grow-1">
+    <h1>Subproject page</h1>
+    <h2 th:text="${session.project.getName()}"></h2>
+    <table>
+        <tr>
+            <th>Sub project</th>
+            <th>Deadline</th>
+            <th>Tasks</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="subproject: ${session.project.getSubProjects()}">
+            <td th:text="${subproject.getSubProjectName()}"></td>
+            <td th:text="${subproject.getSubProjectDeadline()}"></td>
+            <td th:text="${subproject.getTasksAsString()}"></td>
+            <td>
+                <a th:href="@{/readProjectInfo/{projectID}/tasks(projectID=${subproject.getSubProjectID()})}">View tasks</a>
+            </td>
+        </tr>
+    </table>
+</main>
 </body>
 </html>

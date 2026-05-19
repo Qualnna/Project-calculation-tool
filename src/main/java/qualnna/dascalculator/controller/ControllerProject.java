@@ -40,11 +40,17 @@ public class ControllerProject {
         return "home-page";
     }
 
-    @PostMapping("/readProjectInfo/{projectID}")
-    public String readProjectInfo(@PathVariable int projectID, Model model, HttpSession session){
+    @GetMapping("/readProjectInfo/{projectID}")
+    public String readProjectInfo(@PathVariable int projectID, HttpSession session){
         this.project = service.readProjectInfo(projectID);
         session.setAttribute("project", this.project);
-        return "redirect:/show-project";
+        return "show-project";
+    }
+
+    @GetMapping("/readProjectInfo/{projectID}/tasks")
+    public String viewTasks(@PathVariable int projectID, Model model){
+        model.addAttribute("tasks", service.readTasks(projectID));
+        return "show-tasks";
     }
 
     @GetMapping("/employee/create")

@@ -69,7 +69,7 @@ create table employee (
 create table employee_task (
     employee_id int not null,
     task_id int not null,
-    sub_deadline date references sub_project (sub_deadline),
+    sub_deadline date references sub_project (sub_deadline) on delete cascade,
     time_spent int unsigned not null,
     completion_date date not null,
     primary key (employee_id, task_id),

@@ -1,13 +1,17 @@
 package qualnna.dascalculator.model;
 
-import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class Project {
     private int id;
     private String name;
-    private Date startdate;
-    private Date deadline;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startdate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate deadline;
     private int totalRequiredWorkload;
     private int totalAssignedWorkload;
     private float estimatedPrice;
@@ -19,7 +23,14 @@ public class Project {
 
     public Project(){}
 
-    public Project(int id, String name, Date startdate, Date deadline, int totalRequiredWorkload, int totalAssignedWorkload, float estimatedPrice, List<SubProject> subProjects) {
+    public Project(int id, String name, LocalDate startdate, LocalDate deadline) {
+        this.id = id;
+        this.name = name;
+        this.startdate = startdate;
+        this.deadline = deadline;
+    }
+
+    public Project(int id, String name, LocalDate startdate, LocalDate deadline, int totalRequiredWorkload, int totalAssignedWorkload, float estimatedPrice, List<SubProject> subProjects) {
         this.id = id;
         this.name = name;
         this.startdate = startdate;
@@ -46,19 +57,19 @@ public class Project {
         this.name = name;
     }
 
-    public Date getStartdate() {
+    public LocalDate getStartdate() {
         return startdate;
     }
 
-    public void setStartdate(Date startdate) {
+    public void setStartdate(LocalDate startdate) {
         this.startdate = startdate;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 

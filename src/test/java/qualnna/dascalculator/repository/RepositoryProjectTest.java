@@ -10,25 +10,24 @@ import org.springframework.test.context.jdbc.Sql;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 
-import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Sql(scripts ="classpath:H2Schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class RepositoryProjectTest {
 
     @Autowired
     private RepositoryProject repository;
-
-
 
     @BeforeEach
     void setUp() {
@@ -42,9 +41,59 @@ class RepositoryProjectTest {
     void addProject() throws Exception {
         Project projectToInsert = new Project();
         projectToInsert.setName("test Project");
-        projectToInsert.setStartdate(Date.valueOf("2026-11-24"));
-        projectToInsert.setDeadline(Date.valueOf("2026-12-24"));
+        projectToInsert.setStartdate(LocalDate.parse("2026-11-24"));
+        projectToInsert.setDeadline(LocalDate.parse("2026-12-24"));
+
         Project projectWithID = repository.addProject(projectToInsert);
+    }
+
+    @Test
+    void insertAndReadTwoSkills() {
+        repository.insertSkill("HTML");
+        repository.insertSkill("MySQL");
+        List<String> skills = repository.readSkills();
+
+        assertThat(skills).isNotNull();
+        assertFalse(skills.isEmpty());
+        assertThat(skills.contains("HTML"));
+        assertThat(skills.size()).isEqualTo(5);
+    }
+
+    @Test
+    void insertEmployee() {
+        Employee newEmployee = new Employee();
+        newEmployee.setEmployeeName("Test Employee");
+        newEmployee.setHourlyPayRate(900);
+        // make the assertions when there is a read method for employee
+    }
+
+    void addProjectInvalidDates() throws Exception{
+        Project projectToInsert = new Project();
+        projectToInsert.setName("test project");
+        projectToInsert.setStartdate(LocalDate.parse("2026-12-24"));
+        projectToInsert.setDeadline(LocalDate.parse("2026-11-24"));
+
+        assertThrows(SQLException.class, () -> {repository.addProject(projectToInsert);});
+    }
+
+    @Test
+    void readAllEmployees() throws Exception{
+        List<Employee> employeeList = repository.readEmployees();
+    }
+
+    @Test
+    void readAllSkills() throws Exception{
+        List<String> skills = repository.readSkills();
+    }
+
+    @Test
+    void readSurfaceInfo() throws Exception{
+        List<Project> projects= repository.readSurfaceInfo();
+    }
+
+    @Test
+    void readProject() throws Exception{
+        Project foundProject = repository.readProjectInfo(1);
     }
 
     @Test
@@ -53,7 +102,7 @@ class RepositoryProjectTest {
         assertEquals(2, employees.size());
         Employee alice = new Employee();
         for (Employee employee : employees) {
-            if (employee.getName().equals("Alice")){
+            if (employee.getEmployeeName().equals("Alice")){
                 alice = employee;
             }
         }
@@ -71,8 +120,8 @@ class RepositoryProjectTest {
         Employee alice = repository.fetchEmployee(1);
 
         assertNotNull(alice);
-        assertEquals("Alice", alice.getName());
-        assertEquals(500, alice.getHourlyRate());
+        assertEquals("Alice", alice.getEmployeeName());
+        assertEquals(500, alice.getHourlyPayRate());
         assertEquals(List.of("Java", "SQL"), alice.getSkills());
     }
 
@@ -93,13 +142,13 @@ class RepositoryProjectTest {
     @Test
     void updateEmployee_changesNameAndHourlyRate() {
         Employee alice = repository.fetchEmployee(1);
-        alice.setName("Thomas");
-        alice.setHourlyRate(750);
+        alice.setEmployeeName("Thomas");
+        alice.setHourlyPayRate(750);
         repository.updateEmployee(alice);
 
         Employee thomas = repository.fetchEmployee(1);
-        assertEquals("Thomas", thomas.getName());
-        assertEquals(750, thomas.getHourlyRate());
+        assertEquals("Thomas", thomas.getEmployeeName());
+        assertEquals(750, thomas.getHourlyPayRate());
     }
 
     @Test

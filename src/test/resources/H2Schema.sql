@@ -1,13 +1,15 @@
 
+set foreign_key_checks =0;
+drop table if exists employee_task;
 drop table if exists task_skill;
 drop table if exists employee_skill;
-drop table if exists employee_task;
 drop table if exists skill;
 drop table if exists employee;
 drop table if exists external_resource;
 drop table if exists task;
 drop table if exists sub_project;
 drop table if exists project;
+set foreign_key_checks =1;
 
 create table project (
                          project_id int auto_increment primary key,
@@ -21,7 +23,7 @@ create table sub_project (
                              sub_id int auto_increment primary key ,
                              project_id int not null,
                              sub_name varchar(255) not null,
-                             sub_deadline date,
+                             sub_deadline date not null,
                              foreign key (project_id) references project (project_id) on delete cascade
 );
 
@@ -58,7 +60,7 @@ create table employee (
 create table employee_task (
                                employee_id int not null,
                                task_id int not null,
-                               sub_deadline date references sub_project (sub_deadline),
+                               sub_deadline date references sub_project (sub_deadline) on delete cascade,
                                time_spent int not null,
                                completion_date date not null,
                                primary key (employee_id, task_id),

@@ -5,59 +5,52 @@ import java.util.List;
 
 public class Employee {
     private int employeeId;
-    private String name;
-    private double hourlyRate;
-    private List<String> skills;
-    private List<Task> assignedTasks;
+    private String employeeName;
+    private float hourlyPayRate;
+    private List<String> skills = new ArrayList<>();
 
+    public Employee(){}
 
-    public int getEmployeeId() {
-        return employeeId;
+    public Employee(String employeeName, float hourlyPayRate) {
+        this.employeeName = employeeName;
+        this.hourlyPayRate = hourlyPayRate;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public Employee(String employeeName, float hourlyPayRate, List<String> skills) {
+        this.employeeName = employeeName;
+        this.hourlyPayRate = hourlyPayRate;
+        this.skills = skills;
     }
 
-    public String getName() {
-        return name;
+    public String getEmployeeName() {
+        return employeeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
-    public double getHourlyRate() {
-        return hourlyRate;
+    public float getHourlyPayRate() {
+        return hourlyPayRate;
     }
 
-    public void setHourlyRate(double hourlyRate) {
-        this.hourlyRate = hourlyRate;
+    public void setHourlyPayRate(float hourlyPayRate) {
+        this.hourlyPayRate = hourlyPayRate;
     }
 
     public List<String> getSkills() {
-
-        return skills == null ? new ArrayList<>() : skills;
+        return skills;
     }
 
     public void setSkills(List<String> skills) {
         this.skills = skills;
     }
-
-    public List<Task> getAssignedTasks() {
-        return assignedTasks;
-    }
-
-    public void setAssignedTasks(List<Task> assignedTasks) {
-        this.assignedTasks = assignedTasks;
-    }
-
     public String getSkillsAsString() {
         if (skills == null) return "";
         return String.join(", ", skills);
     }
 
-
-
-
+    public void addSkill(String skill){
+        skills.add(skill);
+    }
 }

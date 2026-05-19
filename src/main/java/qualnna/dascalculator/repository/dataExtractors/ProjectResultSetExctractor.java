@@ -72,6 +72,7 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
         return totalTime;
     }
 
+        //can be extracted to a external module should it need to be reused for subprojects/tasks
     private float readEstimatedPrice(Project project) throws SQLException{
         float totalPrice = 0;
         String SQLEstimatedPrice = """

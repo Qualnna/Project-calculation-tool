@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<span th:if="${errorMessage != null}" th:text="${errorMessage}" style="color:red"></span>
+<form action="#" th:action="@{/addProject}" th:object="${project}" method="post">
+    <label for="name">Name of project</label>
+    <input type="text" id="name" th:field="*{name}">
+    <label for="startdate">Start date of project</label>
+    <input type="date" id="startdate" th:field="*{{startdate}}">
+    <label for="deadline">Project deadline</label>
+    <input type="date" id="deadline" th:field="*{{deadline}}">
+    <button type="submit">Create Project</button>
+</form>
+</body>
+</html>

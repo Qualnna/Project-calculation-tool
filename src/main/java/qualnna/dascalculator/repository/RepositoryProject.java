@@ -3,11 +3,6 @@ package qualnna.dascalculator.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
@@ -20,8 +15,6 @@ import java.sql.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import qualnna.dascalculator.model.Employee;
-import qualnna.dascalculator.repository.rowMappers.SingleColumnRowMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,16 +98,6 @@ public class RepositoryProject {
         jdbcTemplate.update(sql, employeeId);
     }
 
-    public List<String> getSkills() {
-        String sqlSkills = "select skill_name from skill";
-        List<String> skills = jdbcTemplate.query(sqlSkills, new SingleColumnRowMapper());
-
-        List<String> results = new ArrayList<>();
-        for(String skill: skills) {
-            results.add(skill);
-        }
-        return results;
-    }
 
     //denne method bliver ikke brugt til noget. den blev lavet for en test.
     public void insertSkill (String skill) {
@@ -132,8 +115,8 @@ public class RepositoryProject {
                 """;
         //jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
         try (PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee)) {
-            updateEmp.setString(1, employee.getName());
-            updateEmp.setFloat(2, employee.getHourlyRate());
+            updateEmp.setString(1, employee.getEmployeeName());
+            updateEmp.setFloat(2, employee.getHourlyPayRate());
             updateEmp.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -150,7 +133,7 @@ public class RepositoryProject {
                 """;
         PreparedStatement prepStmt = connection.prepareStatement(sqlEmpSkill);
         for(String skill: skills) {
-            prepStmt.setString(1, employee.getName());
+            prepStmt.setString(1, employee.getEmployeeName());
             prepStmt.setString(2, skill);
             prepStmt.addBatch();
         }

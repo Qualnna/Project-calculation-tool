@@ -36,10 +36,6 @@ public class ServiceProject {
         }
     }
 
-    public List<String> getSkills() {
-        return repository.getSkills();
-    }
-
     public void addEmployee(Employee employee) throws SQLException {
         try {
             repository.addEmployee(employee);

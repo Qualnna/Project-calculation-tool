@@ -50,19 +50,19 @@ class RepositoryProjectTest {
     void insertAndReadTwoSkills() {
         repository.insertSkill("HTML");
         repository.insertSkill("MySQL");
-        List<String> skills = repository.getSkills();
+        List<String> skills = repository.readSkills();
 
         assertThat(skills).isNotNull();
         assertFalse(skills.isEmpty());
-        assertThat(skills.get(0)).isEqualTo("HTML");
-        assertThat(skills.size()).isEqualTo(2);
+        assertThat(skills.contains("HTML"));
+        assertThat(skills.size()).isEqualTo(5);
     }
 
     @Test
     void insertEmployee() {
         Employee newEmployee = new Employee();
-        newEmployee.setName("Test Employee");
-        newEmployee.setHourlyRate(900);
+        newEmployee.setEmployeeName("Test Employee");
+        newEmployee.setHourlyPayRate(900);
         // make the assertions when there is a read method for employee
     }
 

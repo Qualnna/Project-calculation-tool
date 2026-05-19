@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Error page</title>
-</head>
+<head th:replace="~{fragments/layout :: head}">
 <body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
 <h1>Error message page </h1>
     <p>I will contain useful information for the future! but until then heres an annoying error message:</p>
 <p th:text="${errorMessage}"></p>

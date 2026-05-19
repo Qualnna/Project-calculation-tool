@@ -35,7 +35,8 @@ public class AssignmentResultExtractor implements ResultSetExtractor<List<Assign
 
     private Employee findAssignedEmployee(int employeeID){
         String SQLGetEmployees = """
-                select employee_name as employee_name,
+                select employee.employee_id,
+                       employee_name as employee_name,
                        hourly_rate as hourly_rate,
                        skill_name as skill_name
                 from employee_skill join employee

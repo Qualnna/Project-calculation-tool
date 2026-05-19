@@ -13,11 +13,8 @@ import qualnna.dascalculator.model.Project;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -53,10 +50,10 @@ class RepositoryProjectTest {
         repository.insertSkill("MySQL");
         List<String> skills = repository.readSkills();
 
-        assertThat(skills).isNotNull();
+        assertNotNull(skills);
         assertFalse(skills.isEmpty());
-        assertThat(skills.contains("HTML"));
-        assertThat(skills.size()).isEqualTo(5);
+        assertTrue(skills.contains("HTML"));
+        assertEquals(5, (skills.size()));
     }
 
     @Test

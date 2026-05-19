@@ -17,6 +17,7 @@ public class EmployeeResultSetExtractor implements ResultSetExtractor<List<Emplo
         while(resultSet.next()){
             if(employee.getEmployeeName()==null || !employee.getEmployeeName().equals(resultSet.getString("employee_name"))){
                 employee = new Employee(
+                        resultSet.getInt("employee_id"),
                         resultSet.getString("employee_name"),
                         resultSet.getFloat("hourly_rate")
                 );

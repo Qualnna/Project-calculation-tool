@@ -40,13 +40,14 @@ public class RepositoryProject {
 
     public List<Employee> readEmployees(){
         String SQLGetEmployees = """
-                select employee_name as employee_name,
+                select employee.employee_id as employee_id,
+                       employee_name as employee_name,
                        hourly_rate as hourly_rate,
                        skill_name as skill_name
                 from employee_skill join employee
                 on employee.employee_id = employee_skill.employee_id
                 join skill on skill.skill_id = employee_skill.skill_id
-                order by employee_name;
+                order by employee_id;
                 """;
 
         return jdbcTemplate.query(SQLGetEmployees, new EmployeeResultSetExtractor());

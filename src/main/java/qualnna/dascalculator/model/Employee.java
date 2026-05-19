@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Employee {
+    private int employeeID;
     private String employeeName;
     private float hourlyPayRate;
     private List<String> skills = new ArrayList<>();
 
     public Employee(){}
 
-    public Employee(String employeeName, float hourlyPayRate) {
+    public Employee(int employeeID, String employeeName, float hourlyPayRate) {
+        this.employeeID = employeeID;
         this.employeeName = employeeName;
         this.hourlyPayRate = hourlyPayRate;
     }
@@ -19,6 +21,14 @@ public class Employee {
         this.employeeName = employeeName;
         this.hourlyPayRate = hourlyPayRate;
         this.skills = skills;
+    }
+
+    public int getEmployeeID() {
+        return employeeID;
+    }
+
+    public void setEmployeeID(int employeeID) {
+        this.employeeID = employeeID;
     }
 
     public String getEmployeeName() {
@@ -47,5 +57,15 @@ public class Employee {
 
     public void addSkill(String skill){
         skills.add(skill);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeID=" + employeeID +
+                ", employeeName='" + employeeName + '\'' +
+                ", hourlyPayRate=" + hourlyPayRate +
+                ", skills=" + skills +
+                '}';
     }
 }

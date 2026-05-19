@@ -78,6 +78,7 @@ class RepositoryProjectTest {
     @Test
     void readAllEmployees() throws Exception{
         List<Employee> employeeList = repository.readEmployees();
+        System.out.println(employeeList);
     }
 
     @Test

@@ -23,13 +23,13 @@ public class ControllerProject {
 
     ControllerProject(ServiceProject service){this.service = service;}
 
-    private boolean validateSession(HttpSession session){
+    private boolean isSessionInvalid(HttpSession session){
         return session.getAttribute("employees")==null||session.getAttribute("skills")==null;
     }
 
     @GetMapping("/")
     public String startPage(Model model, HttpSession session){
-        if(validateSession(session)){
+        if(isSessionInvalid(session)){
             this.employees = service.readEmployees();
             this.skills = service.readSkills();
             session.setAttribute("employees", this.employees);
@@ -49,6 +49,9 @@ public class ControllerProject {
 
     @GetMapping("/addProject")
     public String addProjectGet(Model model, HttpSession session){
+        if(isSessionInvalid(session)){
+            return "redirect:/";
+        }
         Project projectToAdd = new Project();
         model.addAttribute("project", projectToAdd);
 

@@ -57,6 +57,8 @@ public class TaskResultSetExtractor implements ResultSetExtractor<List<Task>> {
 
         return jdbcTemplate.query(SQLSkills, new SingleColumnRowMapper<>(), task.getTaskID());
     }
+
+    //does not need to access all columns [*], but it throws a SQLException otherwise
     private List<Assignment> findAssignments(Task task){
         String SQLAssignments = """
                 select *

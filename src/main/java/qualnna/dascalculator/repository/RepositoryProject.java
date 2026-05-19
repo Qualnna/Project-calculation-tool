@@ -2,8 +2,6 @@ package qualnna.dascalculator.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.lookup.DataSourceLookupFailureException;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.Project;
 
@@ -16,7 +14,6 @@ import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.rowMappers.SingleColumnRowMapper;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Repository

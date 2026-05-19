@@ -23,7 +23,11 @@ public class EmployeeResultSetExtractor implements ResultSetExtractor<List<Emplo
                 );
                 foundEmployees.add(employee);
             }
-            foundEmployees.getLast().addSkill(resultSet.getString("skill_name"));
+            String skillName = resultSet.getString("skill_name");
+            if (skillName != null) {
+                foundEmployees.getLast().addSkill(skillName);
+            }
+
         }
         return foundEmployees;
     }

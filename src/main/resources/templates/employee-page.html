@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Employee Page')}"></head>
+<body class="d-flex">
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="p-4 flex-grow-1">
+    <h1>Employee page</h1>
+    <a th:href="@{/employee/create}" class="btn btn-primary mb-3">Add Employee</a>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Hourly/Rate</th>
+            <th>Skills</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="employee: ${session.employees}">
+            <td th:text="${employee.employeeName}"></td>
+            <td th:text="${#numbers.formatInteger(employee.getHourlyPayRate(), 1)}"></td>
+            <td th:text="${employee.getSkills().isEmpty() ? 'No skills' : employee.getSkillsAsString()}"></td>
+            <td>
+                <a th:href="@{/employee/{employeeId}/edit(employeeId=${employee.getEmployeeID()})}">Edit</a>
+                <a th:href="@{/employee/delete/{employeeId}(employeeId=${employee.getEmployeeID()})}">Delete</a>
+            </td>
+        </tr>
+    </table>
+</main>
+
+</body>
+</html>

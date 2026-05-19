@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Edit Employee Page')}"></head>
+<body class="d-flex">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<main class="p-4 flex-grow-1">
+<form action="#" th:action="@{/employee/update}" th:object="${employee}" method="post">
+<div class="container">
+        <h1>Register</h1>
+        <p>Please fill in this form to create an account.</p>
+        <hr>
+        <input type="hidden" th:field="*{employeeID}">
+
+    <label for="name"><b>Employee Name</b></label>
+        <input type="text"  th:field="${employee.employeeName}" id="name" required>
+
+        <label for="hourly_rate"><b>Hourly rate</b></label>
+        <input th:field="*{hourlyPayRate}" type="number"  id="hourly_rate" required>
+        <br>
+        <br>
+    <div th:each="skill : ${skills}">
+        <label>
+            <!--            I use the #lists expression on line 31 from thymeleaf here to use the contains method-->
+            <input type="checkbox"
+                   th:value="${skill}"
+                   name="skills" 
+                   th:checked="${employee.getSkills() != null && #lists.contains(employee.getSkills(), skill)}"/>
+        </label>
+        <label th:text="${skill}"></label>
+    </div>
+    </div>
+    <hr>
+
+    <button type="submit" class="submit-btn">Edit employee</button>
+    <button type ="reset" class="cancel-btn">
+        <a th:href="@{/employees}">Cancel</a>
+    </button>
+</form>
+</main>
+
+</body>
+</html>

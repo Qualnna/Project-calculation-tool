@@ -1,5 +1,3 @@
-use project_calculation;
-
 Set foreign_key_checks = 0;
 truncate table project;
 truncate table sub_project;
@@ -9,7 +7,6 @@ truncate table skill;
 truncate table employee;
 set foreign_key_checks = 1;
 
-start transaction;
 
 
 -- First project 'My First Project'
@@ -52,7 +49,7 @@ insert into employee_skill(employee_id, skill_id) select e.employee_id, s.skill_
 insert into employee_task(employee_id, task_id, sub_deadline, time_spent, completion_date) select e.employee_id, t.task_id, s.sub_deadline, 10, '2026-7-1'
 from (select employee_id from employee where employee_id = 1 )
          as e
-         cross join (select task_id, sub_id from task where task_id = 1) as t
+         cross join (select task_id, sub_id from task where task_id = 3) as t
          cross join (select sub_deadline from sub_project where sub_id = 1) as s;
 
 
@@ -60,6 +57,3 @@ from (select employee_id from employee where employee_id = 1 )
 insert into task_skill (task_id, skill_id) select t.task_id, s.skill_id
 from (select task_id from task where task_id = 1) as t
 cross join (select skill_id from skill where skill_id = 1 ) as s;
-
-
-commit;

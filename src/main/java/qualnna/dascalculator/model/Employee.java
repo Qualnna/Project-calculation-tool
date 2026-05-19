@@ -55,6 +55,11 @@ public class Employee {
         this.skills = skills;
     }
 
+    public String getSkillsAsString() {
+        if (skills == null) return "";
+        return String.join(", ", skills);
+    }
+
     public void addSkill(String skill){
         skills.add(skill);
     }

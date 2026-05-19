@@ -4,16 +4,13 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Employee;
+import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.service.ServiceProject;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import org.springframework.ui.Model;
-import qualnna.dascalculator.model.Employee;
 
 @Controller
 @RequestMapping("/")
@@ -93,4 +90,33 @@ public class ControllerProject {
             return "error";
         }
     }
+    @GetMapping("/employee/{employeeId}/edit")
+    public String employeeView (@PathVariable int employeeId, Model model) {
+        model.addAttribute("employee", service.fetchEmployee(employeeId));
+        model.addAttribute("skills", service.getSkills());
+        return "edit-employee";
+    }
+
+    @PostMapping("/employee/update")
+    public String updateEmployeeAction (@ModelAttribute Employee employee) {
+        service.updateEmployee(employee);
+        return "redirect:/employees";
+    }
+
+    @PostMapping("/employee/delete/{employeeID}")
+    public String deleteEmployee (@PathVariable int employeeID) throws SQLException {
+        service.deleteEmployee(employeeID);
+        return "redirect:/employees";
+    }
+
+
+    @GetMapping("/employees")
+    public String employeePage (HttpSession session) {
+        session.setAttribute("employees", service.readEmployees());
+        return "employee-page";
+    }
+
+
+
+
 }

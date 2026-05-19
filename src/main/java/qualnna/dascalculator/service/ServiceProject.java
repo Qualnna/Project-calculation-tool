@@ -8,9 +8,9 @@ import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
-import qualnna.dascalculator.model.Employee;
 
 import java.util.List;
+
 
 @Service
 @Transactional
@@ -42,5 +42,27 @@ public class ServiceProject {
         } catch (SQLException e) {
             System.out.println("Error in creating employee: " + e.getMessage());
         }
+    }
+
+    public void deleteEmployee(int employeeId) throws SQLException {
+        try {
+            repository.deleteEmployee(employeeId);
+        }
+        catch (SQLException e) {
+            System.out.println("Error in deleting employee: " + e.getMessage());;
+        }
+    }
+
+    public Employee fetchEmployee(int employeeId) {
+        return repository.fetchEmployee(employeeId);
+    }
+
+    public void updateEmployee(Employee employee) {
+        repository.updateEmployee(employee);
+    }
+
+    public List<String> getSkills() {
+
+        return repository.getSkills();
     }
 }

@@ -114,14 +114,12 @@ public class RepositoryProject {
                 insert into employee (employee_name, hourly_rate)
                 values (?, ?);
                 """;
-        //jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
-        try (PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee)) {
-            updateEmp.setString(1, employee.getEmployeeName());
-            updateEmp.setFloat(2, employee.getHourlyPayRate());
-            updateEmp.executeUpdate();
-        } catch (SQLException e) {
-            throw new SQLException(e);
-        }
+
+        PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee);
+        updateEmp.setString(1, employee.getEmployeeName());
+        updateEmp.setFloat(2, employee.getHourlyPayRate());
+        updateEmp.executeUpdate();
+
         addEmpSkill(employee);
     }
 

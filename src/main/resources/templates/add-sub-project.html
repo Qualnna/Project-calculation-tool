@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main>
+    <form action="#" th:action="@{/addSubProject}" th:object="${subProject}" method="post">
+        <label for="subName">Name:</label>
+        <input type="text" id="subName" th:field="*{subProjectName}">
+        <br>
+        <label for="deadline">Deadline</label>
+        <input type="date" id="deadline" th:field="*{subProjectDeadline}">
+        <br>
+        <button type="submit">Add Sub Project</button>
+        <a th:href="@{/}"><button type="button">Cancel</button></a>
+    </form>
+</main>
+</body>
+</html>

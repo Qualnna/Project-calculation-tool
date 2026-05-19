@@ -2,36 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Employee</title>
 </head>
 <body>
 
 <main>
     <div class="error-box" th:if="${errorMessage}">
         <p th:text="${errorMessage}"></p>
-        <p>Medarbejderen kunne ikke oprettes. Du bedes sikre dig at alle felter er udfyldt korrekt.</p>
     </div>
 
     <form action="#" th:action="@{/employee/add}" th:object="${newEmployee}" method="post">
         <label>
-            Navn:
+            Name:
             <input type="text" th:field="*{employeeName}">
         </label>
         <br>
         <label>
-            Timeløn:
+            Hourly pay rate:
             <input type="number" th:field="*{hourlyPayRate}">
         </label>
         <br>
         <label>
-            Kompetencer:
+            Skills:
             <select th:field="*{skills}" size="1" multiple>
                 <option th:each="skill: ${session.skills}" th:value="${skill}" th:text="${skill}"></option>
             </select>
         </label>
         <br>
-        <button type="submit">Opret medarbejder</button>
-        <a th:href="@{/}"><button type="button">Annuller</button></a>
+        <button type="submit">Add Employee</button>
+        <a th:href="@{/}"><button type="button">Cancel</button></a>
     </form>
 </main>
 </body>

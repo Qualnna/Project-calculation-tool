@@ -41,7 +41,7 @@ public class ServiceProject {
         try {
             repository.addEmployee(employee);
         } catch (SQLException e) {
-            throw new CouldNotCreateEmployeeException("Could not create employee");
+            throw new CouldNotCreateEmployeeException("Could not create employee. ");
         }
     }
 }

@@ -8,6 +8,7 @@ import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
+import qualnna.dascalculator.model.SubProject;
 import qualnna.dascalculator.service.ServiceProject;
 
 import java.sql.SQLException;
@@ -52,7 +53,10 @@ public class ControllerProject {
     }
 
     @GetMapping("/employee/create")
-    public String createEmployee(Model model) {
+    public String createEmployee(Model model, HttpSession session) {
+        if(isSessionInvalid(session)){
+            return "redirect:/";
+        }
         Employee newEmployee = new Employee();
         model.addAttribute("newEmployee", newEmployee);
         return "create-employee";
@@ -95,5 +99,22 @@ public class ControllerProject {
         } catch (SQLException e) {
             return "error";
         }
+    }
+
+    @GetMapping("/addSubProject")
+    public String createSubProject(Model model, HttpSession session) {
+        if(isSessionInvalid(session)){
+            return "redirect:/";
+        }
+        SubProject subProjectNew = new SubProject();
+        model.addAttribute("subProject", subProjectNew);
+        return "add-sub-project";
+    }
+
+    @PostMapping("/addSubProject")
+    public String addSubProject() {
+
+        return "redirect:/show-project";
+
     }
 }

@@ -10,13 +10,10 @@ import org.springframework.test.context.jdbc.Sql;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatTemporal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -52,10 +49,10 @@ class RepositoryProjectTest {
         repository.insertSkill("MySQL");
         List<String> skills = repository.readSkills();
 
-        assertThat(skills).isNotNull();
+        assertNotNull(skills);
         assertFalse(skills.isEmpty());
-        assertThat(skills.contains("HTML"));
-        assertThat(skills.size()).isEqualTo(5);
+        assertTrue(skills.contains("HTML"));
+        assertEquals(5, (skills.size()));
     }
 
     @Test

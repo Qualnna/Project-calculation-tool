@@ -12,6 +12,9 @@ import qualnna.dascalculator.service.ServiceProject;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.ui.Model;
+import qualnna.dascalculator.model.Employee;
+
 @Controller
 @RequestMapping("/")
 public class ControllerProject {
@@ -45,6 +48,26 @@ public class ControllerProject {
         this.project = service.readProjectInfo(projectID);
         session.setAttribute("project", this.project);
         return "redirect:/show-project";
+    }
+
+    @GetMapping("/employee/create")
+    public String createEmployee(Model model) {
+        Employee newEmployee = new Employee();
+        model.addAttribute("newEmployee", newEmployee);
+        model.addAttribute("skills", service.getSkills());
+        return "create-employee";
+    }
+    @PostMapping("/employee/add")
+    public String addEmployee(@ModelAttribute Employee newEmployee, Model model) {
+        try {
+        service.addEmployee(newEmployee);
+        return "redirect:/";
+        } catch (SQLException e) {
+            model.addAttribute("newEmployee", newEmployee);
+            model.addAttribute("skills", service.getSkills());
+            model.addAttribute("errorMessage", e.getMessage());
+            return "create-employee";
+        }
     }
 
     @GetMapping("/addProject")

@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatTemporal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -45,6 +47,25 @@ class RepositoryProjectTest {
     }
 
     @Test
+    void insertAndReadTwoSkills() {
+        repository.insertSkill("HTML");
+        repository.insertSkill("MySQL");
+        List<String> skills = repository.getSkills();
+
+        assertThat(skills).isNotNull();
+        assertFalse(skills.isEmpty());
+        assertThat(skills.get(0)).isEqualTo("HTML");
+        assertThat(skills.size()).isEqualTo(2);
+    }
+
+    @Test
+    void insertEmployee() {
+        Employee newEmployee = new Employee();
+        newEmployee.setName("Test Employee");
+        newEmployee.setHourlyRate(900);
+        // make the assertions when there is a read method for employee
+    }
+
     void addProjectInvalidDates() throws Exception{
         Project projectToInsert = new Project();
         projectToInsert.setName("test project");

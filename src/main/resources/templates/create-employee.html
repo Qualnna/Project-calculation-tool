@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<main>
+    <div class="error-box" th:if="${errorMessage}">
+        <p>Placeholder error message: </p>
+        <p>Medarbejderen kunne ikke oprettes. Du bedes sikre dig at alle felter er udfyldt korrekt.</p>
+    </div>
+
+    <form action="#" th:action="@{/employee/add}" th:object="${newEmployee}" method="post">
+        <label>
+            Navn:
+            <input type="text" th:field="*{name}">
+        </label>
+        <br>
+        <label>
+            Timeløn:
+            <input type="number" th:field="*{hourlyRate}">
+        </label>
+        <br>
+        <label>
+            Kompetencer:
+            <select th:field="*{skills}" size="1" multiple>
+                <option th:each="skill: ${skills}" th:value="${skill}" th:text="${skill}"></option>
+            </select>
+        </label>
+        <br>
+        <button type="submit">Opret medarbejder</button>
+        <a th:href="@{/}"><button type="button">Annuller</button></a>
+    </form>
+</main>
+</body>
+</html>

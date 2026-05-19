@@ -4,36 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Employee {
-    private int empId;
-    private String name;
-    private float hourlyRate;
+    private String employeeName;
+    private float hourlyPayRate;
     private List<String> skills = new ArrayList<>();
-    private List<Task> assignedTask = new ArrayList<>();
 
-    public Employee() {}
+    public Employee(){}
 
-    public int getEmpId() {
-        return empId;
+    public Employee(String employeeName, float hourlyPayRate) {
+        this.employeeName = employeeName;
+        this.hourlyPayRate = hourlyPayRate;
     }
 
-    public void setEmpId(int empId) {
-        this.empId = empId;
+    public Employee(String employeeName, float hourlyPayRate, List<String> skills) {
+        this.employeeName = employeeName;
+        this.hourlyPayRate = hourlyPayRate;
+        this.skills = skills;
     }
 
-    public String getName() {
-        return name;
+    public String getEmployeeName() {
+        return employeeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
-    public float getHourlyRate() {
-        return hourlyRate;
+    public float getHourlyPayRate() {
+        return hourlyPayRate;
     }
 
-    public void setHourlyRate(float hourlyRate) {
-        this.hourlyRate = hourlyRate;
+    public void setHourlyPayRate(float hourlyPayRate) {
+        this.hourlyPayRate = hourlyPayRate;
     }
 
     public List<String> getSkills() {
@@ -44,17 +45,7 @@ public class Employee {
         this.skills = skills;
     }
 
-    public List<Task> getAssignedTask() {
-        return assignedTask;
-    }
-
-    public void setAssignedTask(List<Task> assignedTask) {
-        this.assignedTask = assignedTask;
-    }
-
-    public void addSkills(List<String> newSkills) {
-        for (String skill: newSkills) {
-            skills.add(skill);
-        }
+    public void addSkill(String skill){
+        skills.add(skill);
     }
 }

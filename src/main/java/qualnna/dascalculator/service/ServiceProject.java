@@ -2,6 +2,9 @@ package qualnna.dascalculator.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qualnna.dascalculator.exceptions.InvalidDateException;
+import qualnna.dascalculator.model.Employee;
+import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
@@ -14,16 +17,22 @@ import java.util.List;
 public class ServiceProject {
     private final RepositoryProject repository;
 
-    public ServiceProject(RepositoryProject repository) {
-        this.repository = repository;
+    ServiceProject(RepositoryProject repository){this.repository = repository;}
+
+    public List<String> readSkills(){return repository.readSkills();}
+    public List<Employee> readEmployees(){return repository.readEmployees();}
+    public List<Project> readSurfaceInfo(){return repository.readSurfaceInfo();}
+
+    public Project readProjectInfo(int projectID){
+        return repository.readProjectInfo(projectID);
     }
 
-    public void deleteEmployee(int employeeId) throws SQLException {
+
+    public Project addProject(Project projectToAdd) throws SQLException {
         try {
-            repository.deleteEmployee(employeeId);
-        }
-        catch (SQLException e) {
-            System.out.println("Error in deleting employee: " + e.getMessage());;
+            return repository.addProject(projectToAdd);
+        } catch (SQLException e) {
+            throw new InvalidDateException("Start date must be prior to deadline. ");
         }
     }
 

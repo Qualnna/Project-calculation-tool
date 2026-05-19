@@ -60,6 +60,7 @@ public class RepositoryProject {
         return results;
     }
 
+    //denne method bliver ikke brugt til noget. den blev lavet for en test.
     public void insertSkill (String skill) {
         String sqlInsert = """
                 insert into skill (skill_name)

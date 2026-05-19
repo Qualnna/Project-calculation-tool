@@ -3,6 +3,7 @@ package qualnna.dascalculator.controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 
 import java.sql.SQLException;
 
@@ -23,4 +24,10 @@ public class ControllerAdviceProject {
     public String handleGeneralError(Exception ex, Model model) {
         model.addAttribute("errorMessage", "An unexpected error occured");
         return "error";}
+
+    @ExceptionHandler(CouldNotCreateEmployeeException.class)
+    public String couldNotCreate(CouldNotCreateEmployeeException ex, Model model) {
+        model.addAttribute("errorMessage", "An unexpected error occured");
+        return "error";
+    }
 }

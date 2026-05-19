@@ -120,7 +120,7 @@ public class RepositoryProject {
             updateEmp.setFloat(2, employee.getHourlyPayRate());
             updateEmp.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SQLException(e);
         }
         addEmpSkill(employee);
     }

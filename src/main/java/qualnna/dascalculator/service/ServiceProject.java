@@ -2,6 +2,7 @@ package qualnna.dascalculator.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
@@ -40,7 +41,7 @@ public class ServiceProject {
         try {
             repository.addEmployee(employee);
         } catch (SQLException e) {
-            System.out.println("Error in creating employee: " + e.getMessage());
+            throw new CouldNotCreateEmployeeException("Could not create employee");
         }
     }
 }

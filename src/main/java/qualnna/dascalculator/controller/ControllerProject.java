@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
@@ -61,10 +62,12 @@ public class ControllerProject {
         try {
         service.addEmployee(newEmployee);
         return "redirect:/";
-        } catch (SQLException e) {
+        } catch (CouldNotCreateEmployeeException e) {
             model.addAttribute("newEmployee", newEmployee);
             model.addAttribute("errorMessage", e.getMessage());
             return "create-employee";
+        } catch (SQLException e) {
+            return "error";
         }
     }
 

@@ -7,16 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 
 import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatTemporal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Sql(scripts ="classpath:H2Schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-//@Sql(value = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "classpath:H2Data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class RepositoryProjectTest {
 
     @Autowired
@@ -34,9 +40,58 @@ class RepositoryProjectTest {
     void addProject() throws Exception {
         Project projectToInsert = new Project();
         projectToInsert.setName("test Project");
-        projectToInsert.setStartdate(Date.valueOf("2026-11-24"));
-        projectToInsert.setDeadline(Date.valueOf("2026-12-24"));
+        projectToInsert.setStartdate(LocalDate.parse("2026-11-24"));
+        projectToInsert.setDeadline(LocalDate.parse("2026-12-24"));
 
         Project projectWithID = repository.addProject(projectToInsert);
+    }
+
+    @Test
+    void insertAndReadTwoSkills() {
+        repository.insertSkill("HTML");
+        repository.insertSkill("MySQL");
+        List<String> skills = repository.readSkills();
+
+        assertThat(skills).isNotNull();
+        assertFalse(skills.isEmpty());
+        assertThat(skills.contains("HTML"));
+        assertThat(skills.size()).isEqualTo(5);
+    }
+
+    @Test
+    void insertEmployee() {
+        Employee newEmployee = new Employee();
+        newEmployee.setEmployeeName("Test Employee");
+        newEmployee.setHourlyPayRate(900);
+        // make the assertions when there is a read method for employee
+    }
+
+    void addProjectInvalidDates() throws Exception{
+        Project projectToInsert = new Project();
+        projectToInsert.setName("test project");
+        projectToInsert.setStartdate(LocalDate.parse("2026-12-24"));
+        projectToInsert.setDeadline(LocalDate.parse("2026-11-24"));
+
+        assertThrows(SQLException.class, () -> {repository.addProject(projectToInsert);});
+    }
+
+    @Test
+    void readAllEmployees() throws Exception{
+        List<Employee> employeeList = repository.readEmployees();
+    }
+
+    @Test
+    void readAllSkills() throws Exception{
+        List<String> skills = repository.readSkills();
+    }
+
+    @Test
+    void readSurfaceInfo() throws Exception{
+        List<Project> projects= repository.readSurfaceInfo();
+    }
+
+    @Test
+    void readProject() throws Exception{
+        Project foundProject = repository.readProjectInfo(1);
     }
 }

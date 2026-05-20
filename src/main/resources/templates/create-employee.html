@@ -1,36 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/layout :: head('Error page')}"></head>
 <body class="d-flex">
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 
 <main class="p-4 flex-grow-1">
-    <div class="error-box" th:if="${errorMessage}">
-        <p>Placeholder error message: </p>
-        <p>Medarbejderen kunne ikke oprettes. Du bedes sikre dig at alle felter er udfyldt korrekt.</p>
-    </div>
 
-    <form action="#" th:action="@{/employee/add}" th:object="${newEmployee}" method="post">
-        <label>
-            Navn:
-            <input type="text" th:field="*{employeeName}">
-        </label>
-        <br>
-        <label>
-            Timeløn:
-            <input type="number" th:field="*{hourlyPayRate}">
-        </label>
-        <br>
-        <label>
-            Kompetencer:
-            <select th:field="*{skills}" size="1" multiple>
-                <option th:each="skill: ${session.skills}" th:value="${skill}" th:text="${skill}"></option>
-            </select>
-        </label>
-        <br>
-        <button type="submit">Opret medarbejder</button>
-        <a th:href="@{/}"><button type="button">Annuller</button></a>
-    </form>
+    <div class="container card p-4 text-bg-light">
+
+        <h1>Add employee</h1>
+        <p class="text-muted">Fill out the fields below to add an employee.</p>
+
+        <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <hr>
+
+        <form action="#" th:action="@{/employee/add}" th:object="${newEmployee}" method="post">
+
+            <div class="mb-3">
+                <label for="employeeName" class="form-label"><b>Navn</b></label>
+                <input type="text" id="employeeName" th:field="*{employeeName}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="hourlyPayRate" class="form-label"><b>Hourly Pay Rate</b></label>
+                <input type="number" id="hourlyPayRate" th:field="*{hourlyPayRate}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="skills" class="form-label"><b>Skills</b></label>
+                <select id="skills" th:field="*{skills}" class="form-select" multiple>
+                    <option th:each="skill: ${session.skills}" th:value="${skill}" th:text="${skill}"></option>
+                </select>
+                <div class="form-text">Hold Ctrl down to choose several competencies.</div>
+            </div>
+
+            <hr>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Add employee</button>
+                <a class="btn btn-secondary" th:href="@{/}">Cancel</a>
+            </div>
+
+        </form>
+    </div>
 </main>
 </body>
 </html>

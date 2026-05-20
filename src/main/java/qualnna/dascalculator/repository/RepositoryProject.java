@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import qualnna.dascalculator.model.*;
 import qualnna.dascalculator.model.Employee;
-import qualnna.dascalculator.model.Employee;
-import qualnna.dascalculator.model.Project;
-import qualnna.dascalculator.model.Task;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
 import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
 import qualnna.dascalculator.repository.dataExtractors.SurfaceProjectDataRowMapper;
@@ -18,10 +15,6 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -95,7 +88,7 @@ public class RepositoryProject {
         statement.executeUpdate();
         ResultSet keys = statement.getGeneratedKeys();
         keys.next();
-        project.setId(keys.getInt("project_id"));
+        project.setId(keys.getInt(1));
 
         return project;
     }
@@ -112,6 +105,17 @@ public class RepositoryProject {
                 values (?)
                 """;
         jdbcTemplate.update(sqlInsert, skill);
+    }
+
+    public void createTask(Task task, int subProjectId) {
+        String sql = "INSERT INTO task (task_id, sub_id, task_name, workload) VALUES (?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql, ps -> {
+            ps.setInt(1, task.getTaskID());
+            ps.setInt(2, subProjectId);
+            ps.setString(3, task.getTaskName());
+            ps.setInt(4, task.getWorkload());
+        });
     }
 
     public void addEmployee(Employee employee) throws SQLException{
@@ -185,12 +189,8 @@ public class RepositoryProject {
 
     }
 
-    public List<Task> readTasks(int projectID) {
-        String SQL = """
-                select task_id, task_name, workload
-                from task
-                where sub_id = ?
-                """;
-        return jdbcTemplate.query(SQL, new TaskResultSetExtractor(jdbcTemplate), projectID);
+    public void removeTask(int taskID) {
+        String sql = "DELETE FROM task WHERE task_id = ?";
+        jdbcTemplate.update(sql, taskID);
     }
 }

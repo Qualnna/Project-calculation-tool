@@ -20,8 +20,11 @@
             <td th:text="${#numbers.formatInteger(employee.getHourlyPayRate(), 1)}"></td>
             <td th:text="${employee.getSkills().isEmpty() ? 'No skills' : employee.getSkillsAsString()}"></td>
             <td>
-                <a th:href="@{/employee/{employeeId}/edit(employeeId=${employee.getEmployeeID()})}">Edit</a>
-                <a th:href="@{/employee/delete/{employeeId}(employeeId=${employee.getEmployeeID()})}">Delete</a>
+                <a class="btn btn-primary" th:href="@{/employee/{employeeId}/edit(employeeId=${employee.getEmployeeID()})}">Edit</a>
+                <form action="#" method="post" th:action="@{/employee/delete/{employeeId}(employeeId=${employee.getEmployeeID()})}">
+                    <button type="submit" class="btn btn-danger btn-lm mt-3">Delete</button>
+                </form>
+
             </td>
         </tr>
     </table>

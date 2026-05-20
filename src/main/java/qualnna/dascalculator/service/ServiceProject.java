@@ -3,6 +3,7 @@ package qualnna.dascalculator.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qualnna.dascalculator.exceptions.InvalidDateException;
+import qualnna.dascalculator.exceptions.NoSuchEmployee;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.model.Task;
@@ -11,6 +12,7 @@ import qualnna.dascalculator.repository.RepositoryProject;
 import java.sql.SQLException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -26,9 +28,7 @@ public class ServiceProject {
     public Project readProjectInfo(int projectID){
         return repository.readProjectInfo(projectID);
     }
-public List<Task> readTasks(int projectID) {
-    return repository.readTasks(projectID);
-}
+
 
 
     public Project addProject(Project projectToAdd) throws SQLException {
@@ -52,7 +52,7 @@ public List<Task> readTasks(int projectID) {
             repository.deleteEmployee(employeeId);
         }
         catch (SQLException e) {
-            System.out.println("Error in deleting employee: " + e.getMessage());;
+            throw new NoSuchEmployee("Error in deleting employee with ID:" + employeeId);
         }
     }
 
@@ -67,6 +67,14 @@ public List<Task> readTasks(int projectID) {
     public List<String> getSkills() {
 
         return repository.getSkills();
+    }
+
+    public void createTask(Task task, int subProjectId) {
+        repository.createTask(task, subProjectId);
+    }
+
+    public void removeTask(int taskID) {
+        repository.removeTask(taskID);
     }
 }
 

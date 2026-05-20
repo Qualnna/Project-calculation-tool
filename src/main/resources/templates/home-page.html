@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/layout :: head('Home page')}"></head>
 <body class="d-flex">
@@ -10,28 +9,21 @@
     <table>
         <tr>
             <th>Project name</th>
-            <th>Estimated Price</th>
-            <th>Assigned workload</th>
-            <th>Required workload</th>
             <th>Start date</th>
             <th>Deadline</th>
             <th>Actions</th>
         </tr>
         <tr th:each="project: ${projects}">
             <td th:text="${project.getName()}"></td>
-            <td th:text="${project.getEstimatedPrice()}"></td>
-            <td th:text="${project.getTotalAssignedWorkload()}"></td>
-            <td th:text="${project.getTotalRequiredWorkload()}"></td>
             <td th:text="${project.getStartdate()}"></td>
             <td th:text="${project.getDeadline()}"></td>
             <td>
-                <a th:href="@{/readProjectInfo/{projectID}(projectID=${project.getId()})}">Go to project</a>
+                <a class="btn btn-primary" th:href="@{/readProjectInfo/{projectID}(projectID=${project.getId()})}">Go to project</a>
             </td>
-
-
         </tr>
     </table>
-</main>
+    <a th:href="@{/addProject}" class="btn btn-success btn-sm mt-3">Create project</a>
 
+</main>
 </body>
 </html>

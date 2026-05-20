@@ -1,27 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/layout :: head('Show Tasks Page')}"></head>
 <body class="d-flex">
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main class="p-4 flex-grow-1">
-  <h1 th:text="${session.project.getName()}"></h1>
-  <table>
+  <h1 th:text="${'Subproject: ' + session.project.findSubProjectByID(subProjectID).getSubProjectName()}"></h1>
+  <table class="mt-2">
     <tr>
       <th>Task name</th>
       <th>Workload</th>
+      <th>Actions</th>
     </tr>
     <tr th:each="task: ${tasks}">
       <td th:text="${task.getTaskName()}"></td>
       <td th:text="${task.getWorkload()}"></td>
-<!--      <td>-->
-<!--        <a th:href="@{/readProjectInfo/{projectID}(projectID=${project.getId()})}">Go to project</a>-->
-<!--      </td>-->
-
+      <td>
+        <a class="btn btn-primary btn-sm" th:href="@{/assignment/{projectID}/{taskID}(projectID=${session.project.getId()}, taskID=${task.getTaskID()})}">
+          Assign task
+        </a>
+        <form action="#" th:action="@{/delete/task/{subProjectID}(subProjectID=${subProjectID})}" method="post">
+          <input type="hidden" name="taskID" th:value="${task.taskID}"/>
+          <button type="submit" class="btn btn-danger btn-sm mt-3">Delete task</button>
+        </form>
+      </td>
     </tr>
   </table>
-</main>
-
+  <a th:href="@{/create/task/{subProjectID}(subProjectID=${subProjectID})}" class="btn btn-success btn-sm mt-3">Create task</a>
+  <a class="btn btn-primary btn-sm mt-3" th:href="@{/readProjectInfo/{projectID}(projectID=${session.project.getId()})}">Go back</a>
 
 </main>
 </body>

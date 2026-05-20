@@ -63,12 +63,11 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
         for(SubProject subProject: project.getSubProjects()){
             statement.setInt(1, subProject.getSubProjectID());
             statement.addBatch();
-        }
+            ResultSet result = statement.executeQuery();
 
-        ResultSet result = statement.executeQuery();
-
-        while(result.next()){
-            totalTime += result.getInt((1));
+            while(result.next()){
+                totalTime += result.getInt((1));
+            }
         }
 
         return totalTime;
@@ -84,16 +83,14 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
                 join employee on employee.employee_id = employee_task.employee_id;
                 """;
         PreparedStatement statement = connection.prepareStatement(SQLEstimatedPrice);
-        for(SubProject subProject: project.getSubProjects()){
+        for(SubProject subProject: project.getSubProjects()) {
             statement.setInt(1, subProject.getSubProjectID());
             statement.addBatch();
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                totalPrice += result.getFloat(1);
+            }
         }
-        ResultSet result = statement.executeQuery();
-
-        while(result.next()){
-            totalPrice+=result.getFloat(1);
-        }
-
         return totalPrice;
     }
 

@@ -47,6 +47,16 @@ public class SubProject {
         return tasks;
     }
 
+    public Task findTaskById(int projectID,int taskID) {
+        for (Task task : tasks) {
+            if (task.getTaskID() == taskID) {
+                return task;
+            }
+        }
+        throw new IllegalArgumentException("Task with ID " + taskID + " not found in project " + projectID);
+    }
+
+
     public String getTasksAsString() {
         StringBuilder sb = new StringBuilder();
         for (Task task : tasks) {

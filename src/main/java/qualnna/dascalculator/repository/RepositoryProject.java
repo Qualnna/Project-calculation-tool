@@ -105,7 +105,7 @@ public class RepositoryProject {
     }
 
 
-    //denne method bliver ikke brugt til noget. den blev lavet for en test.
+    //This method isn't in use yet. it was made for a test.
     public void insertSkill (String skill) {
         String sqlInsert = """
                 insert into skill (skill_name)
@@ -130,31 +130,41 @@ public class RepositoryProject {
                 insert into employee (employee_name, hourly_rate)
                 values (?, ?);
                 """;
-        //jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
-        try (PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee)) {
-            updateEmp.setString(1, employee.getEmployeeName());
-            updateEmp.setFloat(2, employee.getHourlyPayRate());
-            updateEmp.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee);
+        updateEmp.setString(1, employee.getEmployeeName());
+        updateEmp.setFloat(2, employee.getHourlyPayRate());
+        updateEmp.executeUpdate();
+
         addEmpSkill(employee);
     }
 
     public void addEmpSkill(Employee employee) throws SQLException {
         List<String> skills = employee.getSkills();
-        String sqlEmpSkill = """
+        String SQLEmployeeSkills = """
                 insert into employee_skill (employee_id, skill_id) select e.employee_id, s.skill_id
                 from (select employee_id from employee where employee_name = ?) as e
                 cross join (select skill_id from skill where skill_name = ?) as s;
                 """;
-        PreparedStatement prepStmt = connection.prepareStatement(sqlEmpSkill);
+        PreparedStatement prepStmt = connection.prepareStatement(SQLEmployeeSkills);
         for(String skill: skills) {
             prepStmt.setString(1, employee.getEmployeeName());
             prepStmt.setString(2, skill);
             prepStmt.addBatch();
         }
         prepStmt.executeBatch();
+    }
+
+    public void addSubProject(SubProject subProject, int projectId) throws SQLException {
+        String SQLAddSubProject = """
+                insert into sub_project (sub_name, sub_deadline, project_id)
+                values (?, ?, ?);
+                """;
+        PreparedStatement statement = connection.prepareStatement(SQLAddSubProject);
+        statement.setString(1, subProject.getSubProjectName());
+        statement.setObject(2, subProject.getSubProjectDeadline());
+        statement.setInt(3, projectId);
+        statement.executeUpdate();
     }
 
     public Employee fetchEmployee(int employeeId) {

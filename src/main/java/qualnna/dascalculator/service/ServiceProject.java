@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qualnna.dascalculator.exceptions.AssignmentNotFoundException;
 import qualnna.dascalculator.exceptions.InvalidAssigmentException;
+import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.exceptions.NoSuchEmployee;
 import qualnna.dascalculator.exceptions.ProjectNotFoundException;
@@ -12,10 +13,10 @@ import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.model.Task;
+import qualnna.dascalculator.model.SubProject;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
-import qualnna.dascalculator.model.Employee;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -55,7 +56,15 @@ public class ServiceProject {
         try {
             repository.addEmployee(employee);
         } catch (SQLException e) {
-            System.out.println("Error in creating employee: " + e.getMessage());
+            throw new CouldNotCreateEmployeeException("Could not create employee. ");
+        }
+    }
+
+    public void addSubProject(SubProject subProject, int projectID) throws SQLException {
+        try {
+            repository.addSubProject(subProject, projectID);
+        } catch (SQLException e) {
+            throw new InvalidDateException("Deadline for Sub Project should be within the timeframe of Project. ");
         }
     }
 

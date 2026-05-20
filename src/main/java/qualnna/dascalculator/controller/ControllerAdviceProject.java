@@ -56,6 +56,12 @@ public class ControllerAdviceProject {
     public String handleAssignmentNotFoundException(AssignmentNotFoundException ex, Model model){
         model.addAttribute("errorMessage", ex.getMessage());
         return "404";
+
+}
+    @ExceptionHandler(CouldNotCreateEmployeeException.class)
+    public String couldNotCreate(CouldNotCreateEmployeeException ex, Model model) {
+        model.addAttribute("errorMessage", "An unexpected error occured");
+        return "error";
     }
 }
 

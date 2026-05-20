@@ -1,5 +1,6 @@
 package qualnna.dascalculator.repository;
 
+import com.sun.source.tree.AssertTree;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,11 +63,28 @@ class RepositoryProjectTest {
     }
 
     @Test
-    void insertEmployee() {
+    void insertAndReadEmployee() throws SQLException {
         Employee newEmployee = new Employee();
         newEmployee.setEmployeeName("Test Employee");
-        newEmployee.setHourlyPayRate(900);
-        // make the assertions when there is a read method for employee
+        newEmployee.setHourlyPayRate(700);
+        List<String> skills = repository.readSkills();
+        newEmployee.addSkill(skills.getFirst());
+
+        repository.addEmployee(newEmployee);
+        List<Employee> employees = repository.readEmployees();
+
+        assertEquals(3, employees.size());
+        assertEquals("Test Employee", employees.getLast().getEmployeeName());
+        assertEquals(700, employees.getLast().getHourlyPayRate());
+        assertEquals("Java", employees.getLast().getSkills().getFirst());
+    }
+
+    @Test
+    void readEmployees() {
+        List<Employee> employees = repository.readEmployees();
+        assertFalse(employees.isEmpty());
+        assertEquals(2, employees.size());
+        assertEquals("Bob", employees.get(1).getEmployeeName());
     }
 
     void addProjectInvalidDates() throws Exception{

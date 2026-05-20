@@ -5,11 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import qualnna.dascalculator.exceptions.InvalidAssigmentException;
+import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.model.Task;
+import qualnna.dascalculator.model.SubProject;
 import qualnna.dascalculator.service.ServiceProject;
 
 import java.sql.SQLException;
@@ -54,10 +56,12 @@ public class ControllerProject {
         try {
         service.addEmployee(newEmployee);
         return "redirect:/employees";
-        } catch (SQLException e) {
+        } catch (CouldNotCreateEmployeeException e) {
             model.addAttribute("newEmployee", newEmployee);
             model.addAttribute("errorMessage", e.getMessage());
             return "create-employee";
+        } catch (SQLException e) {
+            return "error";
         }
     }
 
@@ -194,5 +198,31 @@ public class ControllerProject {
                                    Model model, HttpSession session){
         service.deleteAssignment(employeeID, taskID);
         return "redirect:/show-project";
+    }
+
+    @GetMapping("/addSubProject")
+    public String createSubProject(Model model, HttpSession session) {
+        if(isSessionInvalid(session)){
+            return "redirect:/";
+        }
+        SubProject subProjectToAdd = new SubProject();
+        model.addAttribute("subProject", subProjectToAdd);
+        return "add-sub-project";
+    }
+
+    @PostMapping("/addSubProject")
+    public String addSubProject(@ModelAttribute SubProject subProjectToAdd, Model model) {
+        try {
+        this.project.addSubProject(subProjectToAdd);
+        int projectID = this.project.getId();
+        service.addSubProject(subProjectToAdd, projectID);
+        return "redirect:/show-project";
+        } catch (InvalidDateException e) {
+            model.addAttribute("subProject", subProjectToAdd);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "add-sub-project";
+        } catch (SQLException e) {
+            return "error";
+        }
     }
 }

@@ -81,7 +81,7 @@ public class ControllerProject {
         try {
             this.project = service.addProject(projectToAdd);
             session.setAttribute("project", this.project);
-            return "redirect:/show-project";
+            return "redirect:/readProjectInfo/" + project.getId();
         } catch (InvalidDateException e) {
             model.addAttribute("project", projectToAdd);
             model.addAttribute("errorMessage", e.getMessage());
@@ -210,13 +210,20 @@ public class ControllerProject {
         return "add-sub-project";
     }
 
+    @PostMapping("/delete/subproject/{subProjectID}")
+    public String deleteSubProject(@PathVariable int subProjectID, HttpSession session) {
+        Project project = (Project) session.getAttribute("project");
+        service.deleteSubProject(subProjectID);
+        return "redirect:/readProjectInfo/" + project.getId();
+    }
+
     @PostMapping("/addSubProject")
     public String addSubProject(@ModelAttribute SubProject subProjectToAdd, Model model) {
         try {
         this.project.addSubProject(subProjectToAdd);
         int projectID = this.project.getId();
         service.addSubProject(subProjectToAdd, projectID);
-        return "redirect:/show-project";
+        return "redirect:/readProjectInfo/" + project.getId();
         } catch (InvalidDateException e) {
             model.addAttribute("subProject", subProjectToAdd);
             model.addAttribute("errorMessage", e.getMessage());

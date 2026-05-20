@@ -3,12 +3,7 @@ package qualnna.dascalculator.service;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import qualnna.dascalculator.exceptions.AssignmentNotFoundException;
-import qualnna.dascalculator.exceptions.InvalidAssigmentException;
-import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
-import qualnna.dascalculator.exceptions.InvalidDateException;
-import qualnna.dascalculator.exceptions.NoSuchEmployee;
-import qualnna.dascalculator.exceptions.ProjectNotFoundException;
+import qualnna.dascalculator.exceptions.*;
 import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
@@ -113,6 +108,14 @@ public class ServiceProject {
 
     public void removeTask(int taskID) {
         repository.removeTask(taskID);
+    }
+
+    public void deleteSubProject(int subProjectID) {
+        try {
+            repository.deleteSubProject(subProjectID);
+        } catch (DataAccessException e) {
+            throw new NoSubProjectFound("No sub project found with that ID: " + subProjectID);
+        }
     }
 }
 

@@ -143,6 +143,4 @@ public class Project {
     public Task findTaskByID(int subProjectID, int taskID){
         return findSubProjectById(subProjectID).findTaskByID(taskID);
     }
-
-
 }

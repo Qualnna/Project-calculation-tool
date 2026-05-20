@@ -5,10 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import qualnna.dascalculator.exceptions.AssignmentNotFoundException;
-import qualnna.dascalculator.exceptions.NoSubProjectFound;
-import qualnna.dascalculator.exceptions.NoSuchEmployee;
-import qualnna.dascalculator.exceptions.ProjectNotFoundException;
+import qualnna.dascalculator.exceptions.*;
 
 import java.sql.SQLException;
 
@@ -16,6 +13,7 @@ import java.sql.SQLException;
 public class ControllerAdviceProject {
 
     @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFound(IllegalArgumentException e, Model model) {
         model.addAttribute("error", e.getMessage());
         return "error";
@@ -23,17 +21,20 @@ public class ControllerAdviceProject {
 
     @ExceptionHandler(ProjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleProjectNotFoundException(ProjectNotFoundException ex, Model model){
+    public String handleProjectNotFoundException(ProjectNotFoundException ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
         return "404";
     }
+
     @ExceptionHandler(NoSubProjectFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNoSubProjectFound(NoSubProjectFound e, Model model) {
         model.addAttribute("errorMessage", "No sub project could be found with that");
         return "error";
     }
 
     @ExceptionHandler(SQLException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleDatabaseError(SQLException ex, Model model) {
         model.addAttribute("errorMessage", "Database error: could not complete transaction");
         System.out.println("SQL error: " + ex.getMessage());
@@ -41,6 +42,7 @@ public class ControllerAdviceProject {
     }
 
     @ExceptionHandler(NoSuchEmployee.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNoEmployeeToDelete(NoSuchEmployee ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
         return "error";
@@ -49,16 +51,19 @@ public class ControllerAdviceProject {
     @ExceptionHandler(Exception.class)
     public String handleGeneralError(Exception ex, Model model) {
         model.addAttribute("errorMessage", "An unexpected error occured");
-        return "error";}
+        return "error";
+    }
 
     @ExceptionHandler(AssignmentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleAssignmentNotFoundException(AssignmentNotFoundException ex, Model model){
+    public String handleAssignmentNotFoundException(AssignmentNotFoundException ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
         return "404";
 
-}
+    }
+
     @ExceptionHandler(CouldNotCreateEmployeeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String couldNotCreate(CouldNotCreateEmployeeException ex, Model model) {
         model.addAttribute("errorMessage", "An unexpected error occured");
         return "error";

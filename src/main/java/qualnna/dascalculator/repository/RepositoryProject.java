@@ -236,4 +236,9 @@ public class RepositoryProject {
             ps.setInt(2, taskID);
         });
     }
+
+    public void deleteSubProject(int subProjectID) throws DataAccessException  {
+        String SQL = "delete from sub_project where sub_id = ?";
+        jdbcTemplate.update(SQL, subProjectID);
+    }
 }

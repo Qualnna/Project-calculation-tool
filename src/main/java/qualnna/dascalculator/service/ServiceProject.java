@@ -10,7 +10,6 @@ import qualnna.dascalculator.model.SubProject;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
-import qualnna.dascalculator.model.Employee;
 
 import java.util.List;
 

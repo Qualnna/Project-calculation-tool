@@ -100,7 +100,7 @@ public class RepositoryProject {
     }
 
 
-    //denne method bliver ikke brugt til noget. den blev lavet for en test.
+    //This method isn't in use yet. it was made for a test.
     public void insertSkill (String skill) {
         String sqlInsert = """
                 insert into skill (skill_name)

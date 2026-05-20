@@ -14,9 +14,6 @@ import qualnna.dascalculator.service.ServiceProject;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.ui.Model;
-import qualnna.dascalculator.model.Employee;
-
 @Controller
 @RequestMapping("/")
 public class ControllerProject {

@@ -58,9 +58,10 @@ public class RepositoryProject {
     }
 
     public List<Project> readSurfaceInfo(){
+        // Using name as an alias for the project_name will make this fail
         String SQLGetProjectNames = """
                 select project_id as project_id,
-                project_name as name,
+                project_name,
                 start_date as start_date,
                 deadline as deadline from project;
                 """;

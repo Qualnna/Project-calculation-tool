@@ -6,15 +6,15 @@
 </head>
 <body>
 <span th:if="${errorMessage != null}" th:text="${errorMessage}" style="color:red"></span>
-<form action="#" th:action="@{/assignEployee/{subProjectID}(subProjectID=${subProjectID})/{taskID}(taskID=${taskID})}"
-th:object="${newAssignment}" method="post">
+<form action="#" th:action="@{/assignEmployee/{subProjectID}/{taskID}(subProjectID=${subProjectID}, taskID=${taskID})}"
+      th:object="${newAssignment}" method="post">
   <label for="timeSpent">Input time spent on assignment.</label>
   <input type="number" id="timeSpent" th:field="*{timeSpent}" required>
   <label for="completionDate">Input completion date for assignment</label>
   <input type="date" id="completionDate" th:field="*{completionDate}" required>
   <label for="employee">Select employee for the assignment.</label>
-  <select th:field="*{assignedEmployee}" size="1" id="employee">
-    <option th:each="employee: ${session.employees}" th:value="${employee}" th:text="${employee}"></option>
+  <select th:field="*{assignedEmployee.employeeID}" size="1" id="employee">
+    <option th:each="employee: ${session.employees}" th:value="${employee.employeeID}" th:text="${employee.employeeName}"></option>
   </select>
   <button type="submit">Confirm assignment</button>
 </form>

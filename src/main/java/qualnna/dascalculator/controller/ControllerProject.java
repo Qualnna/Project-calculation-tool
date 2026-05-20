@@ -8,7 +8,6 @@ import qualnna.dascalculator.exceptions.InvalidAssigmentException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
-import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.model.Task;
 import qualnna.dascalculator.service.ServiceProject;
@@ -16,9 +15,6 @@ import qualnna.dascalculator.service.ServiceProject;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-
-import org.springframework.ui.Model;
-import qualnna.dascalculator.model.Employee;
 
 @Controller
 @RequestMapping("/")
@@ -189,14 +185,13 @@ public class ControllerProject {
             return "assign-employee";
         }
 
-        return "redirect:/show-project";
+        return "redirect:/readProjectInfo/" + project.getId();
     }
 
     @PostMapping("/deleteAssignment/{employeeID}/{taskID}")
     public String deleteAssignment(@PathVariable int employeeID,
                                    @PathVariable int taskID,
                                    Model model, HttpSession session){
-
         service.deleteAssignment(employeeID, taskID);
         return "redirect:/show-project";
     }

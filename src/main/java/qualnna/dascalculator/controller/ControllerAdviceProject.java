@@ -5,8 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import qualnna.dascalculator.exceptions.AssignmentNotFoundException;
 import qualnna.dascalculator.exceptions.NoSubProjectFound;
 import qualnna.dascalculator.exceptions.NoSuchEmployee;
+import qualnna.dascalculator.exceptions.ProjectNotFoundException;
 
 import java.sql.SQLException;
 
@@ -43,9 +45,6 @@ public class ControllerAdviceProject {
         model.addAttribute("errorMessage", ex.getMessage());
         return "error";
     }
-
-
-
 
     @ExceptionHandler(Exception.class)
     public String handleGeneralError(Exception ex, Model model) {

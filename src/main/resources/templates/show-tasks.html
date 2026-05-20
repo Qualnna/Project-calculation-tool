@@ -15,7 +15,8 @@
       <td th:text="${task.getTaskName()}"></td>
       <td th:text="${task.getWorkload()}"></td>
       <td>
-        <a class="btn btn-primary btn-sm" th:href="@{/assignment/{projectID}/{taskID}(projectID=${session.project.getId()}, taskID=${task.getTaskID()})}">
+
+        <a class="btn btn-primary btn-sm" th:href="@{/assignEmployee/{subProjectID}/{taskID}(subProjectID=${subProjectID}, taskID=${task.getTaskID()})}">
           Assign task
         </a>
         <form action="#" th:action="@{/delete/task/{subProjectID}(subProjectID=${subProjectID})}" method="post">

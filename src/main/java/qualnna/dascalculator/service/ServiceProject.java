@@ -1,16 +1,23 @@
 package qualnna.dascalculator.service;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qualnna.dascalculator.exceptions.AssignmentNotFoundException;
+import qualnna.dascalculator.exceptions.InvalidAssigmentException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.exceptions.NoSuchEmployee;
+import qualnna.dascalculator.exceptions.ProjectNotFoundException;
+import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.model.Task;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
+import qualnna.dascalculator.model.Employee;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,8 +32,13 @@ public class ServiceProject {
     public List<String> readSkills(){return repository.readSkills();}
     public List<Employee> readEmployees(){return repository.readEmployees();}
     public List<Project> readSurfaceInfo(){return repository.readSurfaceInfo();}
+
     public Project readProjectInfo(int projectID){
-        return repository.readProjectInfo(projectID);
+        try {
+            return repository.readProjectInfo(projectID);
+        } catch (DataAccessException e) {
+            throw new ProjectNotFoundException("Something went wrong while trying to access the project.");
+        }
     }
 
 
@@ -44,6 +56,23 @@ public class ServiceProject {
             repository.addEmployee(employee);
         } catch (SQLException e) {
             System.out.println("Error in creating employee: " + e.getMessage());
+        }
+    }
+
+    public void addAssignment(LocalDate subDeadline, int taskID, Assignment assignment){
+        try {
+            repository.addAssignment(subDeadline, taskID, assignment);
+        } catch (DataAccessException e) {
+            throw new InvalidAssigmentException("Could not create assignment. ");
+        }
+    }
+
+    public void deleteAssignment(int employeeID, int taskID){
+        try {
+            repository.deleteAssignment(employeeID, taskID);
+        } catch (DataAccessException e) {
+            throw new AssignmentNotFoundException("Failed to delete Assignment for employeeID = " +
+                    employeeID + "and taskID = " + taskID);
         }
     }
 

@@ -4,6 +4,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import qualnna.dascalculator.exceptions.InvalidAssigmentException;
+import qualnna.dascalculator.exceptions.InvalidDateException;
+import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Project;
@@ -11,7 +14,11 @@ import qualnna.dascalculator.model.Task;
 import qualnna.dascalculator.service.ServiceProject;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.ui.Model;
+import qualnna.dascalculator.model.Employee;
 
 @Controller
 @RequestMapping("/")
@@ -65,6 +72,7 @@ public class ControllerProject {
         }
         Project projectToAdd = new Project();
         model.addAttribute("project", projectToAdd);
+
         return "add-project";
     }
 
@@ -73,7 +81,7 @@ public class ControllerProject {
         try {
             this.project = service.addProject(projectToAdd);
             session.setAttribute("project", this.project);
-            return "redirect:/readProjectInfo/" + this.project.getId();
+            return "redirect:/show-project";
         } catch (InvalidDateException e) {
             model.addAttribute("project", projectToAdd);
             model.addAttribute("errorMessage", e.getMessage());
@@ -155,4 +163,41 @@ public class ControllerProject {
 
 
 
+
+    @GetMapping("/assignEmployee/{subProjectID}/{taskID}")
+    public String assignEmployeeGet(@PathVariable int subProjectID,
+                                    @PathVariable int taskID,
+                                    Model model, HttpSession session){
+        model.addAttribute("subProjectID", subProjectID);
+        model.addAttribute("taskID", taskID);
+        Assignment newAssignment = new Assignment();
+        model.addAttribute("newAssignment", newAssignment);
+        return "assign-employee";
+    }
+
+    @PostMapping("/assignEmployee/{subProjectID}/{taskID}")
+    public String assignEmployeePost(@PathVariable int subProjectID,
+                                     @PathVariable int taskID,
+                                     @ModelAttribute Assignment assignment,
+                                     Model model, HttpSession session){
+        LocalDate subDeadline = project.findSubProjectById(subProjectID).getSubProjectDeadline();
+        try {
+            service.addAssignment(subDeadline, taskID, assignment);
+        } catch (InvalidAssigmentException e) {
+            model.addAttribute("newAssignment", assignment);
+            model.addAttribute("errorMessage", e);
+            return "assign-employee";
+        }
+
+        return "redirect:/show-project";
+    }
+
+    @PostMapping("/deleteAssignment/{employeeID}/{taskID}")
+    public String deleteAssignment(@PathVariable int employeeID,
+                                   @PathVariable int taskID,
+                                   Model model, HttpSession session){
+
+        service.deleteAssignment(employeeID, taskID);
+        return "redirect:/show-project";
+    }
 }

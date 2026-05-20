@@ -1,8 +1,10 @@
 package qualnna.dascalculator.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import qualnna.dascalculator.exceptions.NoSubProjectFound;
 import qualnna.dascalculator.exceptions.NoSuchEmployee;
 
@@ -17,6 +19,12 @@ public class ControllerAdviceProject {
         return "error";
     }
 
+    @ExceptionHandler(ProjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleProjectNotFoundException(ProjectNotFoundException ex, Model model){
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "404";
+    }
     @ExceptionHandler(NoSubProjectFound.class)
     public String handleNoSubProjectFound(NoSubProjectFound e, Model model) {
         model.addAttribute("errorMessage", "No sub project could be found with that");
@@ -43,5 +51,12 @@ public class ControllerAdviceProject {
     public String handleGeneralError(Exception ex, Model model) {
         model.addAttribute("errorMessage", "An unexpected error occured");
         return "error";}
+
+    @ExceptionHandler(AssignmentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleAssignmentNotFoundException(AssignmentNotFoundException ex, Model model){
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "404";
+    }
 }
 

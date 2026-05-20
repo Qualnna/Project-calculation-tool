@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<span th:if="${errorMessage != null}" th:text="${errorMessage}" style="color:red"></span>
+<form action="#" th:action="@{/assignEployee/{subProjectID}(subProjectID=${subProjectID})/{taskID}(taskID=${taskID})}"
+th:object="${newAssignment}" method="post">
+  <label for="timeSpent">Input time spent on assignment.</label>
+  <input type="number" id="timeSpent" th:field="*{timeSpent}" required>
+  <label for="completionDate">Input completion date for assignment</label>
+  <input type="date" id="completionDate" th:field="*{completionDate}" required>
+  <label for="employee">Select employee for the assignment.</label>
+  <select th:field="*{assignedEmployee}" size="1" id="employee">
+    <option th:each="employee: ${session.employees}" th:value="${employee}" th:text="${employee}"></option>
+  </select>
+  <button type="submit">Confirm assignment</button>
+</form>
+</body>
+</html>

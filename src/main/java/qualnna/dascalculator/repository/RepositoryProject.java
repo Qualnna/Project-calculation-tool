@@ -1,10 +1,12 @@
 package qualnna.dascalculator.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.*;
+import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
 import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
@@ -15,6 +17,10 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -54,7 +60,7 @@ public class RepositoryProject {
     public List<Project> readSurfaceInfo(){
         String SQLGetProjectNames = """
                 select project_id as project_id,
-                project_name,
+                project_name as name,
                 start_date as start_date,
                 deadline as deadline from project;
                 """;
@@ -62,7 +68,7 @@ public class RepositoryProject {
         return jdbcTemplate.query(SQLGetProjectNames, new SurfaceProjectDataRowMapper());
     }
 
-    public Project readProjectInfo(int projectID){
+    public Project readProjectInfo(int projectID) throws DataAccessException {
         String SQLGetProjectNames = """
                 select project_id,
                 project_name,
@@ -192,5 +198,31 @@ public class RepositoryProject {
     public void removeTask(int taskID) {
         String sql = "DELETE FROM task WHERE task_id = ?";
         jdbcTemplate.update(sql, taskID);
+    }
+
+    public void addAssignment(LocalDate subDeadline, int taskID, Assignment assignment) throws DataAccessException{
+        String SQLAddAssignment = """
+                insert into employee_task(employee_id, task_id, sub_deadline, time_spent, completion_date)
+                values (?, ?, ?, ?, ?);
+                """;
+
+        jdbcTemplate.update(SQLAddAssignment, ps -> {
+            ps.setInt(1, assignment.getAssignedEmployee().getEmployeeID());
+            ps.setInt(2, taskID);
+            ps.setDate(3, Date.valueOf(subDeadline));
+            ps.setInt(4, assignment.getTimeSpent());
+            ps.setDate(5, Date.valueOf(assignment.getCompletionDate()));});
+
+        }
+
+    public void deleteAssignment(int employeeID, int taskID) throws DataAccessException{
+        String SQLDeleteAssignment = """
+                delete from employee_task where employee_id = ? and task_id = ?;
+                """;
+
+        jdbcTemplate.update(SQLDeleteAssignment, ps -> {
+            ps.setInt(1, employeeID);
+            ps.setInt(2, taskID);
+        });
     }
 }

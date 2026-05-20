@@ -24,19 +24,21 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
     @Override
     public Project extractData(ResultSet resultSet) throws SQLException {
 
-        resultSet.first();
-        Project foundProject = new Project(
-                resultSet.getInt("project_id"),
-                resultSet.getString("project_name"),
-                resultSet.getDate("start_date").toLocalDate(),
-                resultSet.getDate("deadline").toLocalDate());
+        while (resultSet.next()) {
+            Project foundProject = new Project(
+                    resultSet.getInt("project_id"),
+                    resultSet.getString("project_name"),
+                    resultSet.getDate("start_date").toLocalDate(),
+                    resultSet.getDate("deadline").toLocalDate());
 
-        foundProject.setSubProjects(readSubProjects(foundProject.getId()));
+            foundProject.setSubProjects(readSubProjects(foundProject.getId()));
 
-        foundProject.setTotalRequiredWorkload(readRequiredWorkload(foundProject));
-        foundProject.setTotalAssignedWorkload(readAssignedWorkload(foundProject));
-        foundProject.setEstimatedPrice(readEstimatedPrice(foundProject));
-        return foundProject;
+            foundProject.setTotalRequiredWorkload(readRequiredWorkload(foundProject));
+            foundProject.setTotalAssignedWorkload(readAssignedWorkload(foundProject));
+            foundProject.setEstimatedPrice(readEstimatedPrice(foundProject));
+            return foundProject;
+        }
+        return null;
     }
 
     private int readRequiredWorkload(Project project) throws SQLException{
@@ -61,12 +63,11 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
         for(SubProject subProject: project.getSubProjects()){
             statement.setInt(1, subProject.getSubProjectID());
             statement.addBatch();
-        }
+            ResultSet result = statement.executeQuery();
 
-        ResultSet result = statement.executeQuery();
-
-        while(result.next()){
-            totalTime += result.getInt((1));
+            while(result.next()){
+                totalTime += result.getInt((1));
+            }
         }
 
         return totalTime;
@@ -82,16 +83,14 @@ public class ProjectResultSetExctractor implements ResultSetExtractor<Project> {
                 join employee on employee.employee_id = employee_task.employee_id;
                 """;
         PreparedStatement statement = connection.prepareStatement(SQLEstimatedPrice);
-        for(SubProject subProject: project.getSubProjects()){
+        for(SubProject subProject: project.getSubProjects()) {
             statement.setInt(1, subProject.getSubProjectID());
             statement.addBatch();
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                totalPrice += result.getFloat(1);
+            }
         }
-        ResultSet result = statement.executeQuery();
-
-        while(result.next()){
-            totalPrice+=result.getFloat(1);
-        }
-
         return totalPrice;
     }
 

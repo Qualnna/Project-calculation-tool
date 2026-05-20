@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Project;
+import qualnna.dascalculator.model.Task;
 import qualnna.dascalculator.service.ServiceProject;
 
 import java.sql.SQLException;
@@ -36,15 +37,7 @@ public class ControllerProject {
             session.setAttribute("skills", this.skills);
         }
         model.addAttribute("projects", service.readSurfaceInfo());
-
         return "home-page";
-    }
-
-    @PostMapping("/readProjectInfo/{projectID}")
-    public String readProjectInfo(@PathVariable int projectID, Model model, HttpSession session){
-        this.project = service.readProjectInfo(projectID);
-        session.setAttribute("project", this.project);
-        return "redirect:/show-project";
     }
 
     @GetMapping("/employee/create")
@@ -57,7 +50,7 @@ public class ControllerProject {
     public String addEmployee(@ModelAttribute Employee newEmployee, Model model) {
         try {
         service.addEmployee(newEmployee);
-        return "redirect:/";
+        return "redirect:/employees";
         } catch (SQLException e) {
             model.addAttribute("newEmployee", newEmployee);
             model.addAttribute("errorMessage", e.getMessage());
@@ -72,7 +65,6 @@ public class ControllerProject {
         }
         Project projectToAdd = new Project();
         model.addAttribute("project", projectToAdd);
-
         return "add-project";
     }
 
@@ -81,7 +73,7 @@ public class ControllerProject {
         try {
             this.project = service.addProject(projectToAdd);
             session.setAttribute("project", this.project);
-            return "redirect:/show-project";
+            return "redirect:/readProjectInfo/" + this.project.getId();
         } catch (InvalidDateException e) {
             model.addAttribute("project", projectToAdd);
             model.addAttribute("errorMessage", e.getMessage());
@@ -110,12 +102,56 @@ public class ControllerProject {
     }
 
 
+
+
     @GetMapping("/employees")
     public String employeePage (HttpSession session) {
         session.setAttribute("employees", service.readEmployees());
         return "employee-page";
     }
 
+    @GetMapping("/create/task/{subProjectID}")
+    public String taskCreationPage(@PathVariable int subProjectID, Model model) {
+        model.addAttribute("task", new Task());
+        model.addAttribute("subProjectID", (Integer) subProjectID);
+        return "create-task";
+    }
+
+    @PostMapping("/create/task/{subProjectID}")
+    public String taskCreation(@ModelAttribute  Task task, @PathVariable int subProjectID, HttpSession session) {
+        Project project = (Project) session.getAttribute("project");
+        project.addTaskToSubProject(task, subProjectID);
+        service.createTask(task, subProjectID);
+        return "redirect:/readProjectInfo/" + subProjectID + "/tasks";
+    }
+
+    @PostMapping("/delete/task/{subProjectID}")
+    public String taskDeletion(@ModelAttribute  Task task, @PathVariable int subProjectID, HttpSession session) {
+        Project project = (Project) session.getAttribute("project");
+        project.deleteTaskFromProject(task, subProjectID);
+        service.removeTask(task.getTaskID());
+        Project updatedProject = service.readProjectInfo(
+                ((Project) session.getAttribute("project")).getId()
+        );
+        session.setAttribute("project", updatedProject);
+        return "redirect:/readProjectInfo/" + subProjectID + "/tasks";
+    }
+
+
+    @GetMapping("/readProjectInfo/{projectID}")
+    public String readProjectInfo(@PathVariable int projectID, HttpSession session){
+        this.project = service.readProjectInfo(projectID);
+        session.setAttribute("project", this.project);
+        return "show-project";
+    }
+
+    @GetMapping("/readProjectInfo/{subProjectID}/tasks")
+    public String viewTasks(@PathVariable int subProjectID, Model model, HttpSession session){
+        project = (Project) session.getAttribute("project");
+        model.addAttribute("tasks", project.findSubProjectByID(subProjectID).getTasks());
+        model.addAttribute("subProjectID", (Integer) subProjectID);
+        return "show-tasks";
+    }
 
 
 

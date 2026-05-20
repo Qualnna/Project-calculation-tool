@@ -1,9 +1,11 @@
 package qualnna.dascalculator.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import qualnna.dascalculator.exceptions.NoSubProjectFound;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Project {
     private int id;
@@ -39,6 +41,26 @@ public class Project {
         this.totalAssignedWorkload = totalAssignedWorkload;
         this.estimatedPrice = estimatedPrice;
         this.subProjects = subProjects;
+    }
+
+
+    public void deleteTaskFromProject(Task task, int subProjectID) {
+        SubProject project = findSubProjectByID(subProjectID);
+        project.getTasks().remove(task);
+    }
+
+    public void addTaskToSubProject(Task task, int subID) {
+        SubProject subProject = findSubProjectByID(subID);
+        subProject.getTasks().add(task);
+    }
+
+    public SubProject findSubProjectByID(int subID) {
+        for (SubProject sub : subProjects) {
+            if (sub.getSubProjectID() == subID) {
+                return sub;
+            }
+        }
+        throw new NoSubProjectFound("Cant find a subproject with ID: " + subID + " in project.");
     }
 
     public int getId() {

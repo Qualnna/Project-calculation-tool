@@ -47,6 +47,27 @@ public class SubProject {
         return tasks;
     }
 
+    public Task findTaskById(int projectID,int taskID) {
+        for (Task task : tasks) {
+            if (task.getTaskID() == taskID) {
+                return task;
+            }
+        }
+        throw new IllegalArgumentException("Task with ID " + taskID + " not found in project " + projectID);
+    }
+
+
+    public String getTasksAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (Task task : tasks) {
+            sb.append(task.getTaskName());
+            sb.append(", ");
+        }
+        if (sb.length() > 0) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        return sb.toString();
+    }
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }

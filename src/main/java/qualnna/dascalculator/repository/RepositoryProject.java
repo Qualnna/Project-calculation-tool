@@ -4,22 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import qualnna.dascalculator.model.*;
 import qualnna.dascalculator.model.Employee;
-import qualnna.dascalculator.model.Employee;
-import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
 import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
 import qualnna.dascalculator.repository.dataExtractors.SurfaceProjectDataRowMapper;
+import qualnna.dascalculator.repository.dataExtractors.TaskResultSetExtractor;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -59,7 +54,7 @@ public class RepositoryProject {
     public List<Project> readSurfaceInfo(){
         String SQLGetProjectNames = """
                 select project_id as project_id,
-                project_name as name,
+                project_name,
                 start_date as start_date,
                 deadline as deadline from project;
                 """;
@@ -93,7 +88,7 @@ public class RepositoryProject {
         statement.executeUpdate();
         ResultSet keys = statement.getGeneratedKeys();
         keys.next();
-        project.setId(keys.getInt("project_id"));
+        project.setId(keys.getInt(1));
 
         return project;
     }
@@ -110,6 +105,17 @@ public class RepositoryProject {
                 values (?)
                 """;
         jdbcTemplate.update(sqlInsert, skill);
+    }
+
+    public void createTask(Task task, int subProjectId) {
+        String sql = "INSERT INTO task (task_id, sub_id, task_name, workload) VALUES (?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql, ps -> {
+            ps.setInt(1, task.getTaskID());
+            ps.setInt(2, subProjectId);
+            ps.setString(3, task.getTaskName());
+            ps.setInt(4, task.getWorkload());
+        });
     }
 
     public void addEmployee(Employee employee) throws SQLException{
@@ -162,52 +168,6 @@ public class RepositoryProject {
         return result.isEmpty() ? null : result.getFirst();
     }
 
-//    public List<Employee> fetchEmployees() {
-//        String sql = """
-//                        select e.employee_id,
-//                        e.employee_name,
-//                        e.hourly_rate,
-//                        t.task_id,
-//                        t.sub_id,
-//                        t.workload,
-//                        t.task_name,
-//                        s.skill_id,
-//                        s.skill_name
-//                        from employee e
-//                        LEFT JOIN employee_task et ON e.employee_id = et.employee_id
-//                        LEFT JOIN task t ON et.task_id = t.task_id
-//                        LEFT JOIN employee_skill esk ON e.employee_id = esk.employee_id
-//                        LEFT JOIN skill s ON esk.skill_id = s.skill_id
-//
-//                        """;
-//
-//        return jdbcTemplate.query(sql, new EmployeeListMapper());
-//    }
-//
-//    public Employee fetchEmployee(int employeeId) {
-//        String sql = """
-//                        select e.employee_id,
-//                        e.employee_name,
-//                        e.hourly_rate,
-//                        t.task_id,
-//                        t.sub_id,
-//                        t.workload,
-//                        t.task_name,
-//                        s.skill_id,
-//                        s.skill_name
-//                        from employee e
-//                        LEFT JOIN employee_task et ON e.employee_id = et.employee_id
-//                        LEFT JOIN task t ON et.task_id = t.task_id
-//                        LEFT JOIN employee_skill esk ON e.employee_id = esk.employee_id
-//                        LEFT JOIN skill s ON esk.skill_id = s.skill_id
-//                        WHERE e.employee_id = ?
-//
-//
-//                """;
-//          return jdbcTemplate.query(sql, ps -> ps.setInt(1, employeeId), new EmployeeMapper());
-//    }
-
-
     public List<String> getSkills() {
         String sql = "select skill_name from skill";
         return jdbcTemplate.queryForList(sql, String.class);
@@ -227,5 +187,10 @@ public class RepositoryProject {
                     """, employee.getEmployeeID(), skill);
             }
 
+    }
+
+    public void removeTask(int taskID) {
+        String sql = "DELETE FROM task WHERE task_id = ?";
+        jdbcTemplate.update(sql, taskID);
     }
 }

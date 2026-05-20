@@ -1,6 +1,5 @@
 package qualnna.dascalculator.repository.dataExtractors;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jspecify.annotations.NonNull;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;

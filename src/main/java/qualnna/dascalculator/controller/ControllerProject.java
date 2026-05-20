@@ -50,10 +50,7 @@ public class ControllerProject {
     }
 
     @GetMapping("/employee/create")
-    public String createEmployee(Model model, HttpSession session) {
-        if(isSessionInvalid(session)){
-            return "redirect:/";
-        }
+    public String createEmployee(Model model) {
         Employee newEmployee = new Employee();
         model.addAttribute("newEmployee", newEmployee);
         return "create-employee";

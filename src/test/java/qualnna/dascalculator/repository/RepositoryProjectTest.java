@@ -5,8 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 
@@ -91,4 +93,27 @@ class RepositoryProjectTest {
     void readProject() throws Exception{
         Project foundProject = repository.readProjectInfo(1);
     }
+
+    @Test
+    void addAssignment(){
+        Employee employeeToAssign = repository.readEmployees().getLast();
+        Assignment assignmentToAdd = new Assignment(LocalDate.parse("2026-06-28"), 5, employeeToAssign);
+        repository.addAssignment(LocalDate.parse("2026-06-30")
+                , 11, assignmentToAdd);
+    }
+
+    @Test
+    void addBadAssignment(){
+        Employee employeeToAssign = repository.readEmployees().getFirst();
+        Assignment assignmentToAdd = new Assignment(LocalDate.parse("2026-06-28"), 5, employeeToAssign);
+        assertThrows(DataAccessException.class, ()->{repository.addAssignment(LocalDate.parse("2026-06-30")
+                , 12, assignmentToAdd);});
+
+    }
+
+    @Test
+    void deleteAssignment(){
+        repository.deleteAssignment(1, 10);
+    }
+
 }

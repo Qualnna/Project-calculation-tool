@@ -10,6 +10,8 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import qualnna.dascalculator.exceptions.InvalidDateException;
+import qualnna.dascalculator.model.Assignment;
+import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
 import qualnna.dascalculator.service.ServiceProject;
 
@@ -48,7 +50,7 @@ class ControllerProjectTest {
 /*
     @Test
     void addProject() throws Exception{
-        this.session = new MockHttpSession();
+        session = mock(MockHttpSession.class);
         session.setAttribute("skills", "");
         session.setAttribute("employees", "");
         mockMvc.perform(get("/addProject"))
@@ -97,4 +99,13 @@ class ControllerProjectTest {
                 .andExpect(redirectedUrl("/show-project"));
 
     }
+
+    @Test
+    void addAssignmentGet() throws Exception{
+        mockMvc.perform(get("/assignEmployee/1/10"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("assign-employee"));
+    }
+
+
 }

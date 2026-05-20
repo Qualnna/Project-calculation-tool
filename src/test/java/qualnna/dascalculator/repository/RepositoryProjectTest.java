@@ -63,10 +63,14 @@ class RepositoryProjectTest {
         newEmployee.setHourlyPayRate(700);
         List<String> skills = repository.readSkills();
         newEmployee.addSkill(skills.getFirst());
-        repository.addEmployee(newEmployee);
 
+        repository.addEmployee(newEmployee);
         List<Employee> employees = repository.readEmployees();
+
         assertEquals(3, employees.size());
+        assertEquals("Test Employee", employees.getLast().getEmployeeName());
+        assertEquals(700, employees.getLast().getHourlyPayRate());
+        assertEquals("Java", employees.getLast().getSkills().getFirst());
     }
 
     @Test
@@ -74,7 +78,7 @@ class RepositoryProjectTest {
         List<Employee> employees = repository.readEmployees();
         assertFalse(employees.isEmpty());
         assertEquals(2, employees.size());
-        assertEquals("Alice", employees.get(0).getEmployeeName());
+        assertEquals("Bob", employees.get(1).getEmployeeName());
     }
 
     void addProjectInvalidDates() throws Exception{

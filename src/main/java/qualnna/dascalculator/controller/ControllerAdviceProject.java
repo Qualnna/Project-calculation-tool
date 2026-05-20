@@ -14,13 +14,13 @@ public class ControllerAdviceProject {
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleNotFound(IllegalArgumentException e, Model model) {
         model.addAttribute("error", e.getMessage());
-        return "error"; // your error view
+        return "error";
     }
 
     @ExceptionHandler(NoSubProjectFound.class)
     public String handleNoSubProjectFound(NoSubProjectFound e, Model model) {
         model.addAttribute("errorMessage", "No sub project could be found with that");
-        return "error"; // your error view
+        return "error";
     }
 
     @ExceptionHandler(SQLException.class)

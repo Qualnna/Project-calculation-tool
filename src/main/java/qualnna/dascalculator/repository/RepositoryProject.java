@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
+import qualnna.dascalculator.model.SubProject;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
 import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
 import qualnna.dascalculator.repository.dataExtractors.SurfaceProjectDataRowMapper;
@@ -125,17 +126,29 @@ public class RepositoryProject {
 
     public void addEmpSkill(Employee employee) throws SQLException {
         List<String> skills = employee.getSkills();
-        String sqlEmpSkill = """
+        String SQLEmployeeSkills = """
                 insert into employee_skill (employee_id, skill_id) select e.employee_id, s.skill_id
                 from (select employee_id from employee where employee_name = ?) as e
                 cross join (select skill_id from skill where skill_name = ?) as s;
                 """;
-        PreparedStatement prepStmt = connection.prepareStatement(sqlEmpSkill);
+        PreparedStatement prepStmt = connection.prepareStatement(SQLEmployeeSkills);
         for(String skill: skills) {
             prepStmt.setString(1, employee.getEmployeeName());
             prepStmt.setString(2, skill);
             prepStmt.addBatch();
         }
         prepStmt.executeBatch();
+    }
+
+    public void addSubProject(SubProject subProject, int projectId) throws SQLException {
+        String SQLAddSubProject = """
+                insert into sub_project (sub_name, sub_deadline, project_id)
+                values (?, ?, ?);
+                """;
+        PreparedStatement statement = connection.prepareStatement(SQLAddSubProject);
+        statement.setString(1, subProject.getSubProjectName());
+        statement.setObject(2, subProject.getSubProjectDeadline());
+        statement.setInt(3, projectId);
+        statement.executeUpdate();
     }
 }

@@ -106,15 +106,24 @@ public class ControllerProject {
         if(isSessionInvalid(session)){
             return "redirect:/";
         }
-        SubProject subProjectNew = new SubProject();
-        model.addAttribute("subProject", subProjectNew);
+        SubProject subProjectToAdd = new SubProject();
+        model.addAttribute("subProject", subProjectToAdd);
         return "add-sub-project";
     }
 
     @PostMapping("/addSubProject")
-    public String addSubProject() {
-
+    public String addSubProject(@ModelAttribute SubProject subProjectToAdd, Model model) {
+        try {
+        this.project.addSubProject(subProjectToAdd);
+        int projectID = this.project.getId();
+        service.addSubProject(subProjectToAdd, projectID);
         return "redirect:/show-project";
-
+        } catch (InvalidDateException e) {
+            model.addAttribute("sbuProject", subProjectToAdd);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "add-sub-project";
+        } catch (SQLException e) {
+            return "error";
+        }
     }
 }

@@ -6,6 +6,7 @@ import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
+import qualnna.dascalculator.model.SubProject;
 import qualnna.dascalculator.repository.RepositoryProject;
 
 import java.sql.SQLException;
@@ -42,6 +43,14 @@ public class ServiceProject {
             repository.addEmployee(employee);
         } catch (SQLException e) {
             throw new CouldNotCreateEmployeeException("Could not create employee. ");
+        }
+    }
+
+    public void addSubProject(SubProject subProject, int projectID) throws SQLException {
+        try {
+            repository.addSubProject(subProject, projectID);
+        } catch (SQLException e) {
+            throw new InvalidDateException("Deadline for Sub Project should be within the timeframe of Project. ");
         }
     }
 }

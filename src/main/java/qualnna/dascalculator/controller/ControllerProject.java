@@ -120,4 +120,9 @@ public class ControllerProject {
             return "error";
         }
     }
+
+    @PostMapping("/deleteSubProject")
+    public void deleteSubProject() {
+
+    }
 }

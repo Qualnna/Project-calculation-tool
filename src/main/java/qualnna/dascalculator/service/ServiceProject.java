@@ -52,4 +52,8 @@ public class ServiceProject {
             throw new InvalidDateException("Deadline for Sub Project should be within the timeframe of Project. ");
         }
     }
+
+    public void deleteSubProject(SubProject subProject) {
+        repository.deleteSubProject(subProject);
+    }
 }

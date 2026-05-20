@@ -150,4 +150,11 @@ public class RepositoryProject {
         statement.setInt(3, projectId);
         statement.executeUpdate();
     }
+
+    public void deleteSubProject(SubProject subProject) {
+        String SQLDeleteSubProject = """
+                delete from sub_project where sub_id = ?;
+                """;
+        jdbcTemplate.update(SQLDeleteSubProject, subProject.getSubProjectID());
+    }
 }

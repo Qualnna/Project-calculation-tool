@@ -11,7 +11,6 @@ public class SubProject {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate subProjectDeadline;
     private List<Task> tasks;
-
     public SubProject(){}
 
     public SubProject(int subProjectID, String subProjectName, LocalDate subProjectDeadline) {

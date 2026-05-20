@@ -57,6 +57,13 @@ public class ServiceProject {
 
     public void addSubProject(SubProject subProject, int projectID) throws SQLException {
         try {
+            Project project = readProjectInfo(projectID);
+            if (subProject.getSubProjectDeadline().isBefore(project.getStartdate())) {
+                throw new InvalidDateException("Deadline for Sub Project cannot be before the project start date.");
+            }
+            if (subProject.getSubProjectDeadline().isAfter(project.getDeadline())) {
+                throw new InvalidDateException("Deadline for Sub Project cannot be after the deadline of the project.");
+            }
             repository.addSubProject(subProject, projectID);
         } catch (SQLException e) {
             throw new InvalidDateException("Deadline for Sub Project should be within the timeframe of Project. ");

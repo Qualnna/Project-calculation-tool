@@ -220,10 +220,10 @@ public class ControllerProject {
     @PostMapping("/addSubProject")
     public String addSubProject(@ModelAttribute SubProject subProjectToAdd, Model model) {
         try {
-        this.project.addSubProject(subProjectToAdd);
         int projectID = this.project.getId();
         service.addSubProject(subProjectToAdd, projectID);
-        return "redirect:/readProjectInfo/" + project.getId();
+        this.project.addSubProject(subProjectToAdd);
+            return "redirect:/readProjectInfo/" + project.getId();
         } catch (InvalidDateException e) {
             model.addAttribute("subProject", subProjectToAdd);
             model.addAttribute("errorMessage", e.getMessage());

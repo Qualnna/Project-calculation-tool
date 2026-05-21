@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Assignment Page')}"></head>
+<body class="d-flex">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="p-4 flex-grow-1">
 <span th:if="${errorMessage != null}" th:text="${errorMessage}" style="color:red"></span>
-<form action="#" th:action="@{/assignEmployee/{subProjectID}/{taskID}(subProjectID=${subProjectID}, taskID=${taskID})}"
+  <div class="container card p-4 text-bg-light">
+  <form action="#" th:action="@{/assignEmployee/{subProjectID}/{taskID}(subProjectID=${subProjectID}, taskID=${taskID})}"
       th:object="${newAssignment}" method="post">
-  <label for="timeSpent">Input time spent on assignment.</label>
-  <input type="number" id="timeSpent" th:field="*{timeSpent}" required>
-  <label for="completionDate">Input completion date for assignment</label>
-  <input type="date" id="completionDate" th:field="*{completionDate}" required>
-  <label for="employee">Select employee for the assignment.</label>
-  <select th:field="*{assignedEmployee.employeeID}" size="1" id="employee">
+  <label class="form-label" for="timeSpent"><b>Input time spent on assignment.</b></label>
+  <input class="form-control" type="number" id="timeSpent" th:field="*{timeSpent}" required>
+  <label class="form-label" for="completionDate"><b>Input completion date for assignment</b></label>
+  <input class="form-control" type="date" id="completionDate" th:field="*{completionDate}" required>
+  <label class="form-label" for="employee"><b>Select employee for the assignment.</b></label>
+  <select th:field="*{assignedEmployee.employeeID}" size="1" id="employee" class="form-control">
     <option th:each="employee: ${session.employees}" th:value="${employee.employeeID}" th:text="${employee.employeeName}"></option>
   </select>
-  <button type="submit">Confirm assignment</button>
-</form>
+  <button class="btn btn-primary mt-3" type="submit">Confirm assignment</button>
+    <a class="btn btn-secondary mt-3" th:href="@{/readProjectInfo/{subProjectID}/tasks(subProjectID=${subProjectID})}">Go back</a>
+  </form>
+  </div>
+</main>
 </body>
 </html>

@@ -131,5 +131,16 @@ public class Project {
         subProjects.add(subProject);
     }
 
+    public SubProject findSubProjectById(int subProjectID){
+        for(SubProject subProject: subProjects){
+            if(subProject.getSubProjectID() == subProjectID){
+                return subProject;
+            }
+        }
+        return null;
+    }
 
+    public Task findTaskByID(int subProjectID, int taskID){
+        return findSubProjectById(subProjectID).findTaskByID(taskID);
+    }
 }

@@ -1,10 +1,12 @@
 package qualnna.dascalculator.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.*;
+import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
 import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
@@ -15,6 +17,10 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -52,6 +58,7 @@ public class RepositoryProject {
     }
 
     public List<Project> readSurfaceInfo(){
+        // Using name as an alias for the project_name will make this fail
         String SQLGetProjectNames = """
                 select project_id as project_id,
                 project_name,
@@ -62,7 +69,7 @@ public class RepositoryProject {
         return jdbcTemplate.query(SQLGetProjectNames, new SurfaceProjectDataRowMapper());
     }
 
-    public Project readProjectInfo(int projectID){
+    public Project readProjectInfo(int projectID) throws DataAccessException {
         String SQLGetProjectNames = """
                 select project_id,
                 project_name,
@@ -98,7 +105,7 @@ public class RepositoryProject {
     }
 
 
-    //denne method bliver ikke brugt til noget. den blev lavet for en test.
+    //This method isn't in use yet. it was made for a test.
     public void insertSkill (String skill) {
         String sqlInsert = """
                 insert into skill (skill_name)
@@ -123,31 +130,41 @@ public class RepositoryProject {
                 insert into employee (employee_name, hourly_rate)
                 values (?, ?);
                 """;
-        //jdbcTemplate.update(sqlEmployee, employee.getName(), employee.getHourlyRate());
-        try (PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee)) {
-            updateEmp.setString(1, employee.getEmployeeName());
-            updateEmp.setFloat(2, employee.getHourlyPayRate());
-            updateEmp.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        PreparedStatement updateEmp = connection.prepareStatement(sqlEmployee);
+        updateEmp.setString(1, employee.getEmployeeName());
+        updateEmp.setFloat(2, employee.getHourlyPayRate());
+        updateEmp.executeUpdate();
+
         addEmpSkill(employee);
     }
 
     public void addEmpSkill(Employee employee) throws SQLException {
         List<String> skills = employee.getSkills();
-        String sqlEmpSkill = """
+        String SQLEmployeeSkills = """
                 insert into employee_skill (employee_id, skill_id) select e.employee_id, s.skill_id
                 from (select employee_id from employee where employee_name = ?) as e
                 cross join (select skill_id from skill where skill_name = ?) as s;
                 """;
-        PreparedStatement prepStmt = connection.prepareStatement(sqlEmpSkill);
+        PreparedStatement prepStmt = connection.prepareStatement(SQLEmployeeSkills);
         for(String skill: skills) {
             prepStmt.setString(1, employee.getEmployeeName());
             prepStmt.setString(2, skill);
             prepStmt.addBatch();
         }
         prepStmt.executeBatch();
+    }
+
+    public void addSubProject(SubProject subProject, int projectId) throws SQLException {
+        String SQLAddSubProject = """
+                insert into sub_project (sub_name, sub_deadline, project_id)
+                values (?, ?, ?);
+                """;
+        PreparedStatement statement = connection.prepareStatement(SQLAddSubProject);
+        statement.setString(1, subProject.getSubProjectName());
+        statement.setObject(2, subProject.getSubProjectDeadline());
+        statement.setInt(3, projectId);
+        statement.executeUpdate();
     }
 
     public Employee fetchEmployee(int employeeId) {
@@ -192,5 +209,36 @@ public class RepositoryProject {
     public void removeTask(int taskID) {
         String sql = "DELETE FROM task WHERE task_id = ?";
         jdbcTemplate.update(sql, taskID);
+    }
+
+    public void addAssignment(LocalDate subDeadline, int taskID, Assignment assignment) throws DataAccessException{
+        String SQLAddAssignment = """
+                insert into employee_task(employee_id, task_id, sub_deadline, time_spent, completion_date)
+                values (?, ?, ?, ?, ?);
+                """;
+
+        jdbcTemplate.update(SQLAddAssignment, ps -> {
+            ps.setInt(1, assignment.getAssignedEmployee().getEmployeeID());
+            ps.setInt(2, taskID);
+            ps.setDate(3, Date.valueOf(subDeadline));
+            ps.setInt(4, assignment.getTimeSpent());
+            ps.setDate(5, Date.valueOf(assignment.getCompletionDate()));});
+
+        }
+
+    public void deleteAssignment(int employeeID, int taskID) throws DataAccessException{
+        String SQLDeleteAssignment = """
+                delete from employee_task where employee_id = ? and task_id = ?;
+                """;
+
+        jdbcTemplate.update(SQLDeleteAssignment, ps -> {
+            ps.setInt(1, employeeID);
+            ps.setInt(2, taskID);
+        });
+    }
+
+    public void deleteSubProject(int subProjectID) throws DataAccessException  {
+        String SQL = "delete from sub_project where sub_id = ?";
+        jdbcTemplate.update(SQL, subProjectID);
     }
 }

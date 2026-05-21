@@ -11,7 +11,6 @@ public class SubProject {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate subProjectDeadline;
     private List<Task> tasks;
-
     public SubProject(){}
 
     public SubProject(int subProjectID, String subProjectName, LocalDate subProjectDeadline) {
@@ -78,5 +77,14 @@ public class SubProject {
 
     public void setSubProjectID(int subProjectID) {
         this.subProjectID = subProjectID;
+    }
+
+    public Task findTaskByID(int taskID){
+        for(Task task: tasks){
+            if(task.getTaskID()==taskID){
+                return task;
+            }
+        }
+        return null;
     }
 }

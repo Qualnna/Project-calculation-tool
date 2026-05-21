@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Add project page')}"></head>
+<body class="d-flex">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<main class="p-4 flex-grow-1">
+    <div class="container card p-4 text-bg-light">
+        <h1>Create subproject</h1>
+        <p class="text-muted">Fill out the fields below to create a subproject.</p>
+        <div class="alert alert-danger" th:if="${errorMessage != null}" th:text="${errorMessage}"></div>
+        <hr>
+    <form action="#" th:action="@{/addSubProject}" th:object="${subProject}" method="post">
+        <label class="form-label" for="subName"><b>Name:</b></label>
+        <input class="form-control" type="text" id="subName" th:field="*{subProjectName}">
+        <br>
+        <label class="form-label" for="deadline"><b>Deadline</b></label>
+        <input class="form-control" type="date" id="deadline" th:field="*{subProjectDeadline}">
+        <br>
+        <button class="btn btn-primary" type="submit">Add Sub Project</button>
+        <a class="btn btn-secondary" th:href="@{/}">Cancel</a>
+    </form>
+    </div>
+</main>
+</body>
+</html>

@@ -31,10 +31,14 @@
             <td th:text="${subproject.getTasksAsString()}"></td>
             <td>
                 <a class="btn btn-primary" th:href="@{/readProjectInfo/{subProjectID}/tasks(subProjectID=${subproject.getSubProjectID()})}">View tasks</a>
+                <form action="#" th:action="@{/delete/subproject/{subProjectID}(subProjectID=${subproject.getSubProjectID()})}" th:object="${subproject}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm mt-3" th:href="@{/}">Delete subproject</button>
+                </form>
             </td>
         </tr>
     </table>
-    <a class="btn btn-primary btn-sm mt-3" th:href="@{/}">Go back</a>
+    <a class="btn btn-primary btn-sm mt-3" th:href="@{/addSubProject}">Create subproject</a>
+    <a class="btn btn-secondary btn-sm mt-3" th:href="@{/}">Go back</a>
 </main>
 </body>
 </html>

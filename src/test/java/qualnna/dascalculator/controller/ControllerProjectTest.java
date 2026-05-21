@@ -10,13 +10,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import qualnna.dascalculator.exceptions.InvalidDateException;
-import qualnna.dascalculator.model.Project;
+
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.service.ServiceProject;
-
-import java.time.LocalDate;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
@@ -161,6 +157,7 @@ class ControllerProjectTest {
         assertEquals(Set.of("Java", "SQL"), new HashSet<>(alice.getSkills()));
     }
 
+    //Test should redirect back to add-project when InvalidDateException is thrown, but does not.
     @Test
     void employeePage() throws Exception {
         List<Employee> employees = new ArrayList<>();
@@ -171,4 +168,13 @@ class ControllerProjectTest {
 
         Mockito.verify(serviceProject).readEmployees();
     }
+
+    @Test
+    void addAssignmentGet() throws Exception{
+        mockMvc.perform(get("/assignEmployee/1/10"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("assign-employee"));
+    }
+
+
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('View Assignment Page')}"></head>
+<body class="d-flex">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="p-4 flex-grow-1">
+    <div class="container p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 th:text="'Assignments: ' + ${project.name}"></h1>
+            <a class="btn btn-outline-secondary"
+               th:href="@{/readProjectInfo/{id}(id=${session.project.getId()})}">
+                ← Back to project
+            </a>
+        </div>
+
+        <!-- Subproject cards -->
+        <div class="card mb-4" th:each="subProject : ${project.subProjects}">
+            <div class="card-header fw-bold fs-5"
+                 th:text="${subProject.subProjectName + ' | Estimated workload: ' + subProject.subProjectEstimatedWorkload() + 'hrs'} ">
+            </div>
+            <div class="card-body">
+                <!-- Placeholder text if no tasks associated with subproject yet -->
+                <p class="text-muted fst-italic mb-0" th:if="${subProject.tasks.isEmpty()}">
+                    No tasks have been added to this sub project.
+                </p>
+                <div class="card mb-2" th:each="task : ${subProject.tasks}">
+                    <div class="card-header d-flex justify-content-between">
+                        <span th:text="${task.taskName}"></span>
+                        <span class="badge bg-secondary"
+                              th:text="${task.skills.isEmpty()} ? 'No skills listed.' : 'Skills required: ' + ${task.skillsAsString}">                        </span>
+                    </div>
+                    <div class="card-body">
+                        <!-- Checks if no one is assigned the task -->
+                        <p class="text-muted mb-0" th:if="${task.assignments.isEmpty()}">
+                            No one assigned
+                        </p>
+                        <table class="table table-sm mb-0" th:unless="${task.assignments.isEmpty()}">
+                            <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Skills</th>
+                                <th>Time spent</th>
+                                <th>Est. completion</th>
+                            </tr>
+                            </thead>
+
+                            <!-- Task table cards -->
+                            <tbody>
+                            <tr th:each="assignment : ${task.assignments}">
+                                <td th:text="${assignment.assignedEmployee.employeeName}"></td>
+                                <td>
+                         <span th:if="${assignment.assignedEmployee.skills.isEmpty()}"
+                               class="badge bg-secondary">No skills listed</span>
+                                    <span th:each="skill : ${assignment.assignedEmployee.skills}"
+                                          class="badge bg-info text-dark me-1"
+                                          th:text="${skill}">
+                                    </span>
+                                </td>
+                                <td th:text="${assignment.timeSpent + 'hr'}"></td>
+                                <td th:text="${assignment.completionDate}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -4,6 +4,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import qualnna.dascalculator.exceptions.NoSubProjectFound;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -138,6 +140,17 @@ public class Project {
             }
         }
         return null;
+    }
+
+    public List<Assignment> findAllAssignments() {
+        List<Assignment> finalList = new ArrayList<>();
+        for (SubProject subProject : subProjects) {
+            for (Task task : subProject.getTasks()) {
+                finalList.addAll(task.getAssignments());
+            }
+        }
+
+        return finalList;
     }
 
     public Task findTaskByID(int subProjectID, int taskID){

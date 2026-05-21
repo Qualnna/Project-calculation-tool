@@ -232,4 +232,12 @@ public class ControllerProject {
             return "error";
         }
     }
+
+    @GetMapping("/view/assignments")
+    public String viewAssignmentPage(Model model, HttpSession session) {
+        Project project = (Project) session.getAttribute("project");
+        model.addAttribute("assignments", project.findAllAssignments());
+        model.addAttribute("project", project);
+        return "view-assignment";
+    }
 }

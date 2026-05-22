@@ -9,7 +9,6 @@ public class Assignment {
     private LocalDate completionDate;
     private int timeSpent;
     private Employee assignedEmployee;
-
     public Assignment (){}
 
     public Assignment(LocalDate completionDate, int timeSpent) {
@@ -45,5 +44,14 @@ public class Assignment {
 
     public void setAssignedEmployee(Employee assignedEmployee) {
         this.assignedEmployee = assignedEmployee;
+    }
+
+    @Override
+    public String toString() {
+        return "Assignment{" +
+                "completionDate=" + completionDate +
+                ", timeSpent=" + timeSpent +
+                ", assignedEmployee=" + assignedEmployee +
+                '}';
     }
 }

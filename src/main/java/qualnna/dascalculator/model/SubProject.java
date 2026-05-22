@@ -130,6 +130,14 @@ public class SubProject {
         this.subProjectID = subProjectID;
     }
 
+    public int subProjectEstimatedWorkload() {
+        int sumOfWork = 0;
+        for (Task task : tasks) {
+            sumOfWork+= task.getWorkload();
+        }
+        return sumOfWork;
+    }
+
     public Task findTaskByID(int taskID){
         for(Task task: tasks){
             if(task.getTaskID()==taskID){

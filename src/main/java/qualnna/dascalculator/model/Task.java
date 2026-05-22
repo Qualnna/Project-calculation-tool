@@ -74,6 +74,11 @@ public class Task {
         this.taskID = taskID;
     }
 
+    public String getSkillsAsString() {
+        if (skills == null || skills.isEmpty()) return null;
+        return String.join(", ", skills);
+    }
+
     @Override
     public String toString() {
         return taskName;

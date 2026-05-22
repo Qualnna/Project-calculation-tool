@@ -5,6 +5,7 @@ import qualnna.dascalculator.exceptions.NoSubProjectFound;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
@@ -162,6 +163,17 @@ public class Project {
         }
         if (total == 0) return 0;
         return (completed / (double) total) * 100;
+    }
+
+    public List<Assignment> findAllAssignments() {
+        List<Assignment> finalList = new ArrayList<>();
+        for (SubProject subProject : subProjects) {
+            for (Task task : subProject.getTasks()) {
+                finalList.addAll(task.getAssignments());
+            }
+        }
+
+        return finalList;
     }
 
     public Task findTaskByID(int subProjectID, int taskID){

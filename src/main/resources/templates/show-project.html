@@ -7,9 +7,9 @@
     <h1>Project page</h1>
     <table>
         <tr>
-            <th>Estimated Price</th>
-            <th>Assigned workload</th>
-            <th>Required workload</th>
+            <th>Estimated Price(DKK)</th>
+            <th>Assigned workload (H)</th>
+            <th>Required workload (H)</th>
         </tr>
         <tr>
             <td th:text="${#numbers.formatDecimal(session.project.getEstimatedPrice(), 1, 0)}"></td>
@@ -22,7 +22,7 @@
         <tr>
             <th>Sub project</th>
             <th>Deadline</th>
-            <th>Tasks</th>
+            <th>Current tasks</th>
             <th>Actions</th>
         </tr>
         <tr th:each="subproject: ${session.project.getSubProjects()}">

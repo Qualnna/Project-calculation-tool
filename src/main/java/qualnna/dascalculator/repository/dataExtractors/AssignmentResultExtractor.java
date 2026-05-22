@@ -27,6 +27,7 @@ public class AssignmentResultExtractor implements ResultSetExtractor<List<Assign
                     resultSet.getInt("time_spent")
             );
             assignment.setAssignedEmployee(findAssignedEmployee(resultSet.getInt("employee_id")));
+
             foundAssignments.add(assignment);
         }
         return foundAssignments;

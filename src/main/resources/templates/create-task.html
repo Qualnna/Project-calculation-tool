@@ -18,12 +18,17 @@
 
     <form action="#" th:action="@{/create/task/{subProjectID}(subProjectID=${subProjectID})}" th:object="${task}" method="post">
         <label class="form-label" for="taskName"><b>Task name</b></label>
-            <input type="text" th:field="*{taskName}" id="taskName" class="form-control">
+            <input type="text" th:field="*{taskName}" id="taskName" class="form-control" required>
         <br>
         <label class="form-label" for="workload"><b>Workload</b></label>
-        <input class="form-control"  type="number" th:field="*{workload}" id="workload">
-
-
+        <input class="form-control"  type="number" th:field="*{workload}" id="workload" required min="1">
+        <div class="mb-3">
+            <label for="skills" class="form-label"><b>Skills</b></label>
+            <select id="skills" th:field="*{skills}" class="form-select" multiple>
+                <option th:each="skill: ${session.skills}" th:value="${skill}" th:text="${skill}"></option>
+            </select>
+            <div class="form-text">Hold Ctrl down to choose several competencies.</div>
+        </div>
         <button class="btn btn-primary mt-3" type="submit">Add task</button>
         <a class="btn btn-secondary mt-3" th:href="@{/}">Cancel</a>
     </form>

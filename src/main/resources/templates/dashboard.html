@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Dashboard Page')}"></head>
+<body class="d-flex">
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="p-4 flex-grow-1">
+
+    <div class="container p-2">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 th:text="'Project Dashboard View'"></h1>
+            <a class="btn btn-outline-secondary"
+               th:href="@{/}">
+                ← Back to home
+            </a>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="mb-2" th:each="project: ${projects}">
+                <div class="card p-4">
+                    <h3 th:text="${project.name + ' - progress'}"></h3>
+                    <!-- Her bruger jeg switch case + bootstrap til at rendere en progress bar
+                        rate < 25 = rød /  < 50 = gul > 50 grøn -->
+                    <p>Task Completion rate:</p>
+                    <div class="progress" th:switch="${true}">
+                        <div th:case="${project.getTaskCompletionRate() < 25}"
+                             class="progress-bar bg-danger" role="progressbar"
+                             th:style="'width: ' + ${project.getTaskCompletionRate()} + '%'">
+                            <span th:text="${#numbers.formatDecimal(project.getTaskCompletionRate(), 1, 1)} + '%'"></span>
+                        </div>
+                        <div th:case="${project.getTaskCompletionRate() < 50}"
+                             class="progress-bar bg-warning" role="progressbar"
+                             th:style="'width: ' + ${project.getTaskCompletionRate()} + '%'">
+                            <span th:text="${#numbers.formatDecimal(project.getTaskCompletionRate(), 1, 1)} + '%'"></span>
+                        </div>
+                        <div th:case="${true}"
+                             class="progress-bar bg-success" role="progressbar"
+                             th:style="'width: ' + ${project.getTaskCompletionRate()} + '%'">
+                            <span th:text="${#numbers.formatDecimal(project.getTaskCompletionRate(), 1, 1)} + '%'"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <h3 th:text="${'Time breakdown'}"></h3>
+                    <table class="table mb-4">
+                        <tr>
+                            <th>Planned workload</th>
+                            <th>Time spent</th>
+                            <th>Project start</th>
+                            <th>Deadline</th>
+                            <th>Days left</th>
+                        </tr>
+                        <tr>
+                            <td th:text="${project.getTotalRequiredWorkload() + ' hours'}"></td>
+                            <td th:text="${project.getTotalAssignedWorkload() + ' hours'}"></td>
+                            <td th:text="${project.getStartdate()}"></td>
+                            <td th:text="${project.getDeadline()}"></td>
+                            <td th:text="${project.daysLeftUntilDeadline()}"></td>
+                        </tr>
+                    </table>
+
+                    <h3>Sub project breakdown</h3>
+                    <div class="card p-4 mb-2" th:each="subproject : ${project.getSubProjects()}">
+                        <h5  th:text="${subproject.getSubProjectName()}"></h5 >
+                        <table class="table mb-2">
+                            <tr>
+                                <th>Estimated workload</th>
+                                <th>Deadline</th>
+                                <th>Registered tasks</th>
+                                <th>Completed tasks</th>
+                                <th>Assigned workload</th>
+                                <th>Required skills</th>
+                            </tr>
+                            <tr>
+                                <td th:text="${subproject.getTotalRequiredWorkload() + ' hours'}"></td>
+                                <td th:text="${subproject.getSubProjectDeadline()}"></td>
+                                <td th:text="${subproject.getTotalTasks()}"></td>
+                                <td th:text="${subproject.getCompletedTasks()}"></td>
+                                <td th:text="${subproject.getTotalAssignedWorkload()}"></td>
+                                <td><span th:if="${subproject.getRequiredSkills().isEmpty()}"
+                                      class="text-muted fst-italic">No skills registered for this subproject.</span>
+                                <span th:each="skill : ${subproject.getRequiredSkills()}"
+                                      class="badge bg-info text-dark me-1"
+                                      th:text="${skill}"> </span>
+                                </td>
+</span>
+                            </tr>
+                        </table>
+                        <h5>Progress on subproject:</h5>
+                        <div class="progress">
+                            <div class="progress-bar"
+                                 th:style="'width: ' + ${subproject.getProgressPercentage()} + '%'">
+                                <span th:text="${#numbers.formatDecimal(subproject.getProgressPercentage(), 1, 1) + '%'}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+    </div>
+</main>
+</body>
+</html>

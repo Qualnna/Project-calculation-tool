@@ -56,7 +56,7 @@ public class Employee {
     }
 
     public String getSkillsAsString() {
-        if (skills == null) return "";
+        if (skills == null || skills.isEmpty()) return null;
         return String.join(", ", skills);
     }
 

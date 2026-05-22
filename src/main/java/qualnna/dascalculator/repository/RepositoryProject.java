@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import qualnna.dascalculator.model.*;
 import qualnna.dascalculator.model.Assignment;
@@ -11,7 +13,6 @@ import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
 import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
 import qualnna.dascalculator.repository.dataExtractors.SurfaceProjectDataRowMapper;
-import qualnna.dascalculator.repository.dataExtractors.TaskResultSetExtractor;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -20,7 +21,6 @@ import java.sql.SQLException;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -114,15 +114,27 @@ public class RepositoryProject {
         jdbcTemplate.update(sqlInsert, skill);
     }
 
-    public void createTask(Task task, int subProjectId) {
-        String sql = "INSERT INTO task (task_id, sub_id, task_name, workload) VALUES (?, ?, ?, ?)";
+    public void createTask(Task task, int subProjectId) throws DataAccessException {
+        String sql = "INSERT INTO task (sub_id, task_name, workload) VALUES (?, ?, ?)";
 
-        jdbcTemplate.update(sql, ps -> {
-            ps.setInt(1, task.getTaskID());
-            ps.setInt(2, subProjectId);
-            ps.setString(3, task.getTaskName());
-            ps.setInt(4, task.getWorkload());
-        });
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, subProjectId);
+            ps.setString(2, task.getTaskName());
+            ps.setInt(3, task.getWorkload());
+            return ps;
+        }, keyHolder);
+
+        Number generatedId = keyHolder.getKey();
+        int newTaskId = generatedId.intValue();
+
+        String taskSQL = "INSERT INTO task_skill (task_id, skill_id) SELECT ?, skill_id FROM skill WHERE skill_name = ?";
+        for (String skillName : task.getSkills())
+        {
+            jdbcTemplate.update(taskSQL, newTaskId, skillName);
+        }
     }
 
     public void addEmployee(Employee employee) throws SQLException{
@@ -241,4 +253,6 @@ public class RepositoryProject {
         String SQL = "delete from sub_project where sub_id = ?";
         jdbcTemplate.update(SQL, subProjectID);
     }
+
+
 }

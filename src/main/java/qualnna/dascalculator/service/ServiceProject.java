@@ -14,8 +14,8 @@ import qualnna.dascalculator.repository.RepositoryProject;
 import java.sql.SQLException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 @Service
@@ -109,8 +109,12 @@ public class ServiceProject {
         return repository.getSkills();
     }
 
-    public void createTask(Task task, int subProjectId) {
-        repository.createTask(task, subProjectId);
+    public void createTask(Task task, int subProjectId) throws CouldNotCreateTask {
+        try {
+            repository.createTask(task, subProjectId);
+        } catch (DataAccessException e) {
+            throw new CouldNotCreateTask("Failure when creating task. Try again.");
+        }
     }
 
     public void removeTask(int taskID) {
@@ -123,6 +127,16 @@ public class ServiceProject {
         } catch (DataAccessException e) {
             throw new NoSubProjectFound("No sub project found with that ID: " + subProjectID);
         }
+    }
+
+    public List<Project> allProjects() {
+        List<Project> oldProjects = readSurfaceInfo();
+        List<Project> newProjects = new ArrayList<>();
+
+        for (Project project : oldProjects) {
+            newProjects.add(repository.readProjectInfo(project.getId()));
+        }
+        return newProjects;
     }
 }
 

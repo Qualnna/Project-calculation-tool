@@ -5,8 +5,10 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 
 <main class="p-4 flex-grow-1">
+    <div class="card container">
     <h1>Welcome to the project calculation tool page</h1>
-    <table>
+        <hr>
+    <table class="table">
         <tr>
             <th>Project name</th>
             <th>Start date</th>
@@ -18,12 +20,12 @@
             <td th:text="${project.getStartdate()}"></td>
             <td th:text="${project.getDeadline()}"></td>
             <td>
-                <a class="btn btn-primary" th:href="@{/readProjectInfo/{projectID}(projectID=${project.getId()})}">Go to project</a>
+                <a class="btn btn-primary" th:href="@{/readProjectInfo/{projectID}(projectID=${project.getId()})}">View project</a>
             </td>
         </tr>
     </table>
     <a th:href="@{/addProject}" class="btn btn-success btn-sm mt-3">Create project</a>
-
+    </div>
 </main>
 </body>
 </html>

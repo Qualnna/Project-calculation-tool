@@ -114,7 +114,7 @@ public class RepositoryProject {
         jdbcTemplate.update(sqlInsert, skill);
     }
 
-    public void createTask(Task task, int subProjectId) {
+    public void createTask(Task task, int subProjectId) throws DataAccessException {
         String sql = "INSERT INTO task (sub_id, task_name, workload) VALUES (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();

@@ -109,8 +109,12 @@ public class ServiceProject {
         return repository.getSkills();
     }
 
-    public void createTask(Task task, int subProjectId) {
-        repository.createTask(task, subProjectId);
+    public void createTask(Task task, int subProjectId) throws CouldNotCreateTask {
+        try {
+            repository.createTask(task, subProjectId);
+        } catch (DataAccessException e) {
+            throw new CouldNotCreateTask("Failure when creating task. Try again.");
+        }
     }
 
     public void removeTask(int taskID) {

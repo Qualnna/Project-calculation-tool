@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import qualnna.dascalculator.exceptions.CouldNotCreateTask;
 import qualnna.dascalculator.exceptions.InvalidAssigmentException;
 import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
 import qualnna.dascalculator.exceptions.InvalidDateException;
@@ -117,20 +118,25 @@ public class ControllerProject {
         session.setAttribute("employees", service.readEmployees());
         return "employee-page";
     }
-
     @GetMapping("/create/task/{subProjectID}")
-    public String taskCreationPage(@PathVariable int subProjectID, Model model) {
+    public String showCreateTaskForm(@PathVariable int subProjectID, Model model) {
         model.addAttribute("task", new Task());
-        model.addAttribute("subProjectID", (Integer) subProjectID);
+        model.addAttribute("subProjectID", subProjectID);
         return "create-task";
     }
 
     @PostMapping("/create/task/{subProjectID}")
-    public String taskCreation(@ModelAttribute  Task task, @PathVariable int subProjectID, HttpSession session) {
-        Project project = (Project) session.getAttribute("project");
-        project.addTaskToSubProject(task, subProjectID);
-        service.createTask(task, subProjectID);
+    public String taskCreation(@ModelAttribute  Task task, @PathVariable int subProjectID, HttpSession session, Model model) {
+        try {
+            Project project = (Project) session.getAttribute("project");
+            project.addTaskToSubProject(task, subProjectID);
+            service.createTask(task, subProjectID);
+            return "redirect:/readProjectInfo/" + subProjectID + "/tasks";
+        } catch (CouldNotCreateTask e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/readProjectInfo/" + subProjectID + "/tasks";
+
     }
 
     @PostMapping("/delete/task/{subProjectID}")

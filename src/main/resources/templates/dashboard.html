@@ -67,6 +67,7 @@
                                 <th>Registered tasks</th>
                                 <th>Completed tasks</th>
                                 <th>Assigned workload</th>
+                                <th>Required skills</th>
                             </tr>
                             <tr>
                                 <td th:text="${subproject.getTotalRequiredWorkload() + ' hours'}"></td>
@@ -74,6 +75,13 @@
                                 <td th:text="${subproject.getTotalTasks()}"></td>
                                 <td th:text="${subproject.getCompletedTasks()}"></td>
                                 <td th:text="${subproject.getTotalAssignedWorkload()}"></td>
+                                <td><span th:if="${subproject.getRequiredSkills().isEmpty()}"
+                                      class="text-muted fst-italic">No skills registered for this subproject.</span>
+                                <span th:each="skill : ${subproject.getRequiredSkills()}"
+                                      class="badge bg-info text-dark me-1"
+                                      th:text="${skill}"> </span>
+                                </td>
+</span>
                             </tr>
                         </table>
                         <h5>Progress on subproject:</h5>

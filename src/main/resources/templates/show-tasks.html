@@ -6,7 +6,7 @@
 <main class="p-4 flex-grow-1">
   <div class="card p-4">
   <h1 th:text="${'Subproject: ' + session.project.findSubProjectByID(subProjectID).subProjectName}"></h1>
-  <table class="mt-2">
+  <table class="table mt-2">
     <tr>
       <th>Task name</th>
       <th>Workload</th>
@@ -17,16 +17,16 @@
       <td th:text="${task.getWorkload()}"></td>
       <td>
 
-        <a class="btn btn-primary"
+        <a class="btn btn-primary mb-1"
            th:href="@{/view/assignments/{subProjectID}/{taskID}(subProjectID=${subProjectID}, taskID=${task.getTaskID()})}">
-          Go to assignments
+         View assignments
         </a>
-        <a class="btn btn-success btn-sm" th:href="@{/assignEmployee/{subProjectID}/{taskID}(subProjectID=${subProjectID}, taskID=${task.getTaskID()})}">
+        <a class="btn btn-success mb-1" th:href="@{/assignEmployee/{subProjectID}/{taskID}(subProjectID=${subProjectID}, taskID=${task.getTaskID()})}">
           Assign task
         </a>
         <form action="#" th:action="@{/delete/task/{subProjectID}(subProjectID=${subProjectID})}" method="post">
           <input type="hidden" name="taskID" th:value="${task.taskID}"/>
-          <button type="submit" class="btn btn-danger btn-sm mt-3">Delete task</button>
+          <button type="submit" class="btn btn-danger mb-1">Delete task</button>
         </form>
 
       </td>

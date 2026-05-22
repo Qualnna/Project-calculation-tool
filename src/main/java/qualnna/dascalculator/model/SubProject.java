@@ -3,7 +3,9 @@ package qualnna.dascalculator.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SubProject {
     private int subProjectID;
@@ -48,6 +50,15 @@ public class SubProject {
 
     public int getTotalTasks() {
        return tasks.size();
+    }
+
+    public Set<String> getRequiredSkills() {
+        // Using a immutable DS to have only unique entries
+        Set<String> skills = new HashSet<>();
+        for (Task task : tasks) {
+            skills.addAll(task.getSkills());
+        }
+        return skills;
     }
 
     public int getCompletedTasks() {
@@ -146,6 +157,4 @@ public class SubProject {
         }
         return null;
     }
-
-
 }

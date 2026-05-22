@@ -10,13 +10,11 @@
             <th>Estimated Price(DKK)</th>
             <th>Assigned workload (H)</th>
             <th>Required workload (H)</th>
-            <th>View project assignments</th>
         </tr>
         <tr>
             <td th:text="${#numbers.formatDecimal(session.project.getEstimatedPrice(), 1, 0)}"></td>
             <td th:text="${session.project.getTotalAssignedWorkload()}"></td>
             <td th:text="${session.project.getTotalRequiredWorkload()}"></td>
-            <td> <a class="btn btn-primary" th:href="@{/view/assignments}">Go to assignments</a></td>
         </tr>
     </table>
     <h2 th:text="${session.project.getName()}"></h2>

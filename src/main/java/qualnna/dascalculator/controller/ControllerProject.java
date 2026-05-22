@@ -233,11 +233,10 @@ public class ControllerProject {
         }
     }
 
-    @GetMapping("/view/assignments")
-    public String viewAssignmentPage(Model model, HttpSession session) {
+    @GetMapping("/view/assignments/{subProjectID}/{taskID}")
+    public String viewAssignmentPage(@PathVariable int subProjectID, @PathVariable int taskID, Model model, HttpSession session) {
         Project project = (Project) session.getAttribute("project");
-        model.addAttribute("assignments", project.findAllAssignments());
-        model.addAttribute("project", project);
+        model.addAttribute("task", project.findTaskByID(subProjectID,taskID));
         return "view-assignment";
     }
 }

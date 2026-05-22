@@ -28,9 +28,7 @@ For at køre applikationen lokalt skal du have følgende installeret:
 ## Link til kørende applikation
 
 Applikationen er deployet og kan findes her:
-[Kørende Applikation](https://your-deployment-link.com/)  
-*(Bemærk: Erstat linket med den faktiske URL til jeres deployede applikation)*
-
+<-link->
 ## Funktionalitet
 
 - **Projektstyring**: Opret og administrer overordnede projekter.

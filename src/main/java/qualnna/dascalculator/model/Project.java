@@ -4,8 +4,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import qualnna.dascalculator.exceptions.NoSubProjectFound;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class Project {
     private int id;
@@ -138,6 +138,30 @@ public class Project {
             }
         }
         return null;
+    }
+
+
+    // Using chronounit from the java.time lib  to be able to calculate deadline
+    public long daysLeftUntilDeadline() {
+        return ChronoUnit.DAYS.between(LocalDate.now(), deadline);
+    }
+
+
+    // Completion rate of the assigned workload for the entire project
+    public double getCompletionRateInHours() {
+        if (getTotalRequiredWorkload() == 0) return 0.0;
+        return (double) this.getTotalAssignedWorkload() / this.getTotalRequiredWorkload() * 100;
+    }
+
+    public double getTaskCompletionRate() {
+        int completed = 0;
+        int total = 0;
+        for (SubProject sub : subProjects) {
+            completed += sub.getCompletedTasks();
+            total += sub.getTotalTasks();
+        }
+        if (total == 0) return 0;
+        return (completed / (double) total) * 100;
     }
 
     public Task findTaskByID(int subProjectID, int taskID){

@@ -12,14 +12,16 @@
 
 <nav th:fragment="navbar"
      class="d-flex flex-column bg-light border-end"
-     style="width: 220px; min-height: 100vh; padding-top: 1rem; background: #f2f2f2">
+     style="width: 220px; min-height: 100vh; padding-top: 1rem; background: #f2f2f2;" >
 
     <div class="px-3 pb-1 mb-2 border-bottom">
         <span class="fw-semibold fs-6">Project Calculation Tool</span>
     </div>
 
     <a th:href="@{/}" class="nav-link text-secondary px-3 py-2 mb-1">Home page</a>
+    <a th:href="@{/projects/dashboard}" class="nav-link text-secondary px-3 py-2 mb-1">Dashboard</a>
     <a th:href="@{/employees}" class="nav-link text-secondary px-3 py-2 mb-1">Employees</a>
+
 </nav>
 
 

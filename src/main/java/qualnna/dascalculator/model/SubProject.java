@@ -46,6 +46,57 @@ public class SubProject {
         return tasks;
     }
 
+    public int getTotalTasks() {
+       return tasks.size();
+    }
+
+    public int getCompletedTasks() {
+        int completedTaskCount = 0;
+        List<Task> tasks = getTasks();
+
+        for (Task task : tasks) {
+            int totalTimeSpentOnTask = 0;
+            // Sum up all time spent by everyone assigned to this task
+            for (Assignment assignment : task.getAssignments()) {
+                totalTimeSpentOnTask += assignment.getTimeSpent();
+            }
+            // The task is only complete if the collective work matches the workload
+            if (totalTimeSpentOnTask >= task.getWorkload()) {
+                completedTaskCount++;
+            }
+        }
+        return completedTaskCount;
+    }
+
+
+    public int getTotalRequiredWorkload() {
+        int total = 0;
+        for (Task task : tasks) {
+            total += task.getWorkload();
+        }
+        return total;
+    }
+
+    public int getTotalAssignedWorkload() {
+        int total = 0;
+        for (Task task : tasks) {
+            for (Assignment assignment : task.getAssignments()) {
+                total += assignment.getTimeSpent();
+            }
+        }
+        return total;
+    }
+
+    // Progress based on the amount of completed tasks out of the total amount of tasks associated
+    // with the current subproject
+    public double getProgressPercentage() {
+        int total = getTotalTasks();
+        if (total == 0) return 0;
+        return (getCompletedTasks() / (double) total) * 100;
+    }
+
+
+
     public Task findTaskById(int projectID,int taskID) {
         for (Task task : tasks) {
             if (task.getTaskID() == taskID) {
@@ -87,4 +138,6 @@ public class SubProject {
         }
         return null;
     }
+
+
 }

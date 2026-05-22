@@ -232,4 +232,10 @@ public class ControllerProject {
             return "error";
         }
     }
+
+    @GetMapping("/projects/dashboard")
+    public String viewProjectDashboard(Model model) {
+        model.addAttribute("projects", service.allProjects());
+        return "dashboard";
+    }
 }

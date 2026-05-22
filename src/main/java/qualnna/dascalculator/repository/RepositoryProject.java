@@ -11,7 +11,6 @@ import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.repository.dataExtractors.EmployeeResultSetExtractor;
 import qualnna.dascalculator.repository.dataExtractors.ProjectResultSetExctractor;
 import qualnna.dascalculator.repository.dataExtractors.SurfaceProjectDataRowMapper;
-import qualnna.dascalculator.repository.dataExtractors.TaskResultSetExtractor;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -20,7 +19,6 @@ import java.sql.SQLException;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -241,4 +239,6 @@ public class RepositoryProject {
         String SQL = "delete from sub_project where sub_id = ?";
         jdbcTemplate.update(SQL, subProjectID);
     }
+
+
 }

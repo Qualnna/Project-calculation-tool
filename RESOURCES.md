@@ -17,9 +17,10 @@ Spring-boot-h2console version 4.0.6\
 Spring-boot-starter-jdbc-test version 4.0.6
 
 ## Frontend:
-All frontend is written in hmtl+css.\
+All frontend is written in hmtl+CSS.\
 Spring-boot-starter-thymeleaf version 4.0.6\
-Spring-boot-starter-webmbc version 4.0.6
+Spring-boot-starter-webmbc version 4.0.6\
+Bootstrap version 5.3.3 used for CSS styling.
 #### Webslice test tools:
 Spring-boot-starter-thymeleaf-test version 4.0.6\
 Spring-boot-starter-webmvc-test version 4.0.6

@@ -27,8 +27,8 @@ For at køre applikationen lokalt skal du have følgende installeret:
 
 ## Link til kørende applikation
 
-Applikationen er deployet og kan findes her:
-<-link->
+Applikationen er deployet og kan findes her: [Project calculation applikation](https://projectcalculation.azurewebsites.net/)
+
 ## Funktionalitet
 
 - **Projektstyring**: Opret og administrer overordnede projekter.
@@ -39,7 +39,7 @@ Applikationen er deployet og kan findes her:
 
 ## Teknologier
 
-- **Backend**: Spring Boot 3.x (Java 21)
+- **Backend**: Spring Boot 4.0.6x (Java 21)
 - **Database**: MySQL (med H2 til test)
 - **Frontend**: Thymeleaf & CSS
 - **Build Tool**: Maven

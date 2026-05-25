@@ -52,7 +52,7 @@ class ControllerProjectTest {
         alice.setSkills(new ArrayList<>(List.of("Java", "SQL")));
         employees.add(alice);
         when(serviceProject.fetchEmployee(1)).thenReturn(alice);
-        when(serviceProject.getSkills()).thenReturn(List.of("Java", "SQL", "Python"));
+        when(serviceProject.readSkills()).thenReturn(List.of("Java", "SQL", "Python"));
 
     }
 
@@ -132,7 +132,7 @@ class ControllerProjectTest {
                 .andExpect(model().attributeExists("employee"))
                 .andExpect(model().attributeExists("skills"));
         Mockito.verify(serviceProject).fetchEmployee(1);
-        Mockito.verify(serviceProject).getSkills();
+        Mockito.verify(serviceProject).readSkills();
     }
 
     @Test

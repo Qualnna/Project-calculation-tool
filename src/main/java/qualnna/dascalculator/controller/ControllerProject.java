@@ -94,7 +94,7 @@ public class ControllerProject {
     @GetMapping("/employee/{employeeId}/edit")
     public String employeeView (@PathVariable int employeeId, Model model) {
         model.addAttribute("employee", service.fetchEmployee(employeeId));
-        model.addAttribute("skills", service.getSkills());
+        model.addAttribute("skills", service.readSkills());
         return "edit-employee";
     }
 

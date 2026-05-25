@@ -103,11 +103,7 @@ public class ServiceProject {
     public void updateEmployee(Employee employee) {
         repository.updateEmployee(employee);
     }
-
-    public List<String> getSkills() {
-
-        return repository.getSkills();
-    }
+    
 
     public void createTask(Task task, int subProjectId) throws CouldNotCreateTask {
         try {

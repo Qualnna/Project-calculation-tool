@@ -174,11 +174,6 @@ class RepositoryProjectTest {
         assertEquals(List.of("Java", "SQL"), alice.getSkills());
     }
 
-    @Test
-    void getSkills() {
-        List<String> skills = repository.getSkills();
-        assertEquals(List.of("Java", "SQL", "Python"), skills);
-    }
 
     @Test
     void deleteEmployee_removesEmployee() throws SQLException {

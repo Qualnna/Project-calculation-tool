@@ -197,10 +197,7 @@ public class RepositoryProject {
         return result.isEmpty() ? null : result.getFirst();
     }
 
-    public List<String> getSkills() {
-        String sql = "select skill_name from skill";
-        return jdbcTemplate.queryForList(sql, String.class);
-    }
+
 
     public void updateEmployee(Employee employee) {
         jdbcTemplate.update(

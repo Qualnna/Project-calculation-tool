@@ -4,10 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import qualnna.dascalculator.exceptions.CouldNotCreateTask;
-import qualnna.dascalculator.exceptions.InvalidAssigmentException;
-import qualnna.dascalculator.exceptions.CouldNotCreateEmployeeException;
-import qualnna.dascalculator.exceptions.InvalidDateException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import qualnna.dascalculator.exceptions.*;
 import qualnna.dascalculator.model.Assignment;
 import qualnna.dascalculator.model.Employee;
 import qualnna.dascalculator.model.Project;
@@ -90,6 +88,17 @@ public class ControllerProject {
         } catch (SQLException e) {
             return "error";
         }
+    }
+
+    @PostMapping("/delete/project")
+    public String deleteProject(@RequestParam("projectId") int projectId, RedirectAttributes redirect,Model model, HttpSession session) {
+        try {
+            service.deleteProject(projectId);
+            session.removeAttribute("project");
+        } catch (ProjectNotFoundException e) {
+            redirect.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/";
     }
     @GetMapping("/employee/{employeeId}/edit")
     public String employeeView (@PathVariable int employeeId, Model model) {

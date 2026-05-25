@@ -134,5 +134,13 @@ public class ServiceProject {
         }
         return newProjects;
     }
+
+    public void deleteProject(int projectId) {
+        try {
+            repository.deleteProject(projectId);
+        } catch (DataAccessException e) {
+            throw new ProjectNotFoundException("Could not delete project with ID: " + projectId);
+        }
+    }
 }
 

@@ -8,7 +8,8 @@
     <div class="card container">
     <h1>Welcome to the project calculation tool page</h1>
         <hr>
-    <table class="table">
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="text-danger"></p>
+        <table class="table">
         <tr>
             <th>Project name</th>
             <th>Start date</th>
@@ -20,6 +21,10 @@
             <td th:text="${project.getStartdate()}"></td>
             <td th:text="${project.getDeadline()}"></td>
             <td>
+                <form action="#" th:action="@{/delete/project}" method="post">
+                    <input type="hidden" name="projectId" th:value="${project.getId()}"/>
+                    <button type="submit" class="btn btn-danger">Delete project</button>
+                </form>
                 <a class="btn btn-primary" th:href="@{/readProjectInfo/{projectID}(projectID=${project.getId()})}">View project</a>
             </td>
         </tr>

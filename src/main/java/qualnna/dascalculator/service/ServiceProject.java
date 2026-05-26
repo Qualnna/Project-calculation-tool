@@ -135,7 +135,7 @@ public class ServiceProject {
         return newProjects;
     }
 
-    public void deleteProject(int projectId) {
+    public void deleteProject(int projectId) throws ProjectNotFoundException {
         try {
             repository.deleteProject(projectId);
         } catch (DataAccessException e) {

@@ -252,4 +252,13 @@ public class RepositoryProject {
     }
 
 
+    public void deleteProject(int projectId) throws DataAccessException {
+        String SQL = "delete from project where project_id = ?";
+        int rowsAffected = jdbcTemplate.update(SQL, projectId);
+
+        if (rowsAffected == 0) {
+            throw new DataAccessException("No project found with ID: " + projectId) {};
+        }
+
+    }
 }
